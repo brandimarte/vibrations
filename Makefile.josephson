@@ -17,10 +17,8 @@
 
 CFLAGS = -g -I. -Wall -ansi -O3 -axSSE4.2
 MKL    = /opt/intel/composer_xe_2011_sp1.6.233/mkl
-LDLIBS = $(MKL)/lib/intel64/libmkl_intel_lp64.a \
-	 $(MKL)/lib/intel64/libmkl_sequential.a \
-	 $(MKL)/libmkl_core.a
-#LDLIBS = -lmkl_intel -lmkl_sequential -lmkl_core
+LDLIBS = -L$(MKL)/lib/intel64 -lmkl_intel_lp64 \
+	 -lmkl_sequential -lmkl_core
 
 RM = /bin/rm -f
 CC = icc

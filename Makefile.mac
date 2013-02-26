@@ -15,12 +15,10 @@
 #  Makefile to build 'vibranal' code.                     #
 #  *****************************************************  #
 
-CFLAGS = -g -I. -Wall -ansi -O3 -axSSE4.2
-MKL    = /opt/intel/composer_xe_2013.1.119/mkl
-LDLIBS = $(MKL)/lib/libmkl_intel_lp64.a \
-	 $(MKL)/lib/libmkl_sequential.a \
-	 $(MKL)/lib/libmkl_core.a
-#LDLIBS = -lmkl_intel -lmkl_sequential -lmkl_core
+CFLAGS  = -g -I. -Wall -ansi -O3 -axSSE4.2
+MKL     = /opt/intel/composer_xe_2013.1.119/mkl
+LDLIBS  = -L$(MKL)/lib -lmkl_intel_lp64 \
+	  -lmkl_sequential -lmkl_core
 
 RM = /bin/rm -f
 CC = icc
