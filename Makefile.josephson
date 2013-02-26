@@ -1,7 +1,7 @@
 #  *****************************************************  #
 #             ** Phonon Vibration Analysis **             #
 #                                                         #
-#                    **  Version 1  **                    #
+#                    **  Version 2  **                    #
 #                                                         #
 #                         IF/USP                          #
 #                                                         #
@@ -9,15 +9,17 @@
 #                                                         #
 #   Author: Pedro Brandimarte Mendonca                    #
 #                                                         #
-#   File: Makefile                                        #
+#   File: Makefile.josephson                              #
 #                                                         #
 #  *****************************************************  #
 #  Makefile to build 'vibranal' code.                     #
 #  *****************************************************  #
 
 CFLAGS = -g -I. -Wall -ansi -O3 -axSSE4.2
-MKL    = /opt/intel/composer_xe_2013.1.119/mkl/lib
-LDLIBS = $(MKL)/libmkl_intel_lp64.a $(MKL)/libmkl_sequential.a $(MKL)/libmkl_core.a
+MKL    = /opt/intel/composer_xe_2011_sp1.6.233/mkl
+LDLIBS = $(MKL)/lib/intel64/libmkl_intel_lp64.a \
+	 $(MKL)/lib/intel64/libmkl_sequential.a \
+	 $(MKL)/libmkl_core.a
 #LDLIBS = -lmkl_intel -lmkl_sequential -lmkl_core
 
 RM = /bin/rm -f
@@ -35,7 +37,8 @@ CC = icc
 #  *****************************************************  #
 
 vibranal: Check.o Utils.o Phonon.o main.o
-	$(CC) $(CFLAGS) -o vibranal Check.o Utils.o Phonon.o main.o $(LDLIBS) 
+	$(CC) $(CFLAGS) -o vibranal Check.o Utils.o \
+	Phonon.o main.o $(LDLIBS) 
 
 #  *****************************************************  #
 
