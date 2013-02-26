@@ -43,5 +43,5 @@ vibranal: Check.o Utils.o Phonon.o main.o
 #  *****************************************************  #
 
 clean:
-	$(RM) *~ \#~ .\#* *.o core a.out
+	$(RM) *~ \#~ .\#* *.o vibranal core a.out
 
