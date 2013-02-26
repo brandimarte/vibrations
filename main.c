@@ -9,7 +9,7 @@
 /**                                                         **/
 /**   Author: Pedro Brandimarte Mendonca                    **/
 /**                                                         **/
-/**   File: vibranal.c                                      **/
+/**   File: main.c                                          **/
 /**                                                         **/
 /**   Versions: 1 - 10/10/2012                              **/
 /**             2 - 08/01/2013                              **/

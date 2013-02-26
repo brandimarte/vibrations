@@ -34,8 +34,8 @@ CC = icc
 
 #  *****************************************************  #
 
-vibranal: Check.o Utils.o Phonon.o vibranal.o
-	$(CC) $(CFLAGS) -o vibranal Check.o Utils.o Phonon.o vibranal.o $(LDLIBS) 
+vibranal: Check.o Utils.o Phonon.o main.o
+	$(CC) $(CFLAGS) -o vibranal Check.o Utils.o Phonon.o main.o $(LDLIBS) 
 
 #  *****************************************************  #
 
