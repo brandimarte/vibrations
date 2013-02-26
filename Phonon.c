@@ -932,7 +932,7 @@ static void ephOut (double *EigVal, double *Meph)
       for (s = 0; s < nspin; s++) {
 	 for (i = 0; i < nOrb; i++) {
 	    for (j = 0; j < nOrb; j ++)
-	       fprintf (EPH, " % .15e", Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]);
+	       fprintf (EPH, " (% .15e,0.000000000000000e00)", Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]);
 	    fprintf (EPH, "\n");
 	 }
 	 fprintf (EPH, "\n");
@@ -945,7 +945,7 @@ static void ephOut (double *EigVal, double *Meph)
    /* 	 fprintf (EPH, "%d %.10E\n\n", s + 1, EigVal[l]); */
    /* 	 for (i = 0; i < nOrb; i++) { */
    /* 	    for (j = 0; j < nOrb; j ++) */
-   /* 	       fprintf (EPH, " % .15e", Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]); */
+   /* 	       fprintf (EPH, " (% .15e,0.000000000000000e00)", Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]); */
    /* 	    fprintf (EPH, "\n"); */
    /* 	 } */
    /* 	 fprintf (EPH, "\n"); */
