@@ -1,0 +1,8 @@
+Check.o
+Phonon.o
+Utils.o
+main.o
+vibranal
+Makefile
+!.gitignore
+
