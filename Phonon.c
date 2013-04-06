@@ -64,21 +64,24 @@ static double FCdispl; /* atoms displacement */
 static double *ef; /* Fermi energy values */
 static element *dynAtoms; /* dynamic atoms chemical info */
 static nmass periodicTable[95] = { /* {Z,A} - from SIESTA 3.1 */
-   { 0,  0.00},{ 1,  1.01},{ 2,  4.00},{ 3,  6.94},{ 4,  9.01},{ 5, 10.81},
-   { 6, 12.01},{ 7, 14.01},{ 8, 16.00},{ 9, 19.00},{10, 20.18},{11, 22.99},
-   {12, 24.31},{13, 26.98},{14, 28.09},{15, 30.97},{16, 32.07},{17, 35.45},
-   {18, 39.95},{19, 39.10},{20, 40.08},{21, 44.96},{22, 47.88},{23, 50.94},
-   {24, 52.00},{25, 54.94},{26, 55.85},{27, 58.93},{28, 58.69},{29, 63.55},
-   {30, 65.39},{31, 69.72},{32, 72.61},{33, 74.92},{34, 78.96},{35, 79.90},
-   {36, 83.80},{37, 85.47},{38, 87.62},{39, 88.91},{40, 91.22},{41, 92.91},
-   {42, 95.94},{43, 98.91},{44,101.07},{45,102.91},{46,106.42},{47,107.87},
-   {48,112.41},{49,114.82},{50,118.71},{51,121.75},{52,127.60},{53,126.90},
-   {54,131.29},{55,132.91},{56,137.33},{57,138.91},{58,140.12},{59,140.91},
-   {60,144.24},{61,146.92},{62,150.36},{63,151.97},{64,157.25},{65,158.93},
-   {66,162.50},{67,164.93},{68,167.26},{69,168.93},{70,173.04},{71,174.97},
-   {72,178.49},{73,180.95},{74,183.85},{75,186.21},{76,190.20},{77,192.22},
-   {78,195.08},{79,196.97},{80,200.59},{81,204.38},{82,207.20},{83,208.98},
-   {84,208.98},{85,209.99},{86,222.02},{87,223.02},{88,226.03},{89,227.03},
+   { 0,  0.00},{ 1,  1.01},{ 2,  4.00},{ 3,  6.94},{ 4,  9.01},
+   { 5, 10.81},{ 6, 12.01},{ 7, 14.01},{ 8, 16.00},{ 9, 19.00},
+   {10, 20.18},{11, 22.99},{12, 24.31},{13, 26.98},{14, 28.09},
+   {15, 30.97},{16, 32.07},{17, 35.45},{18, 39.95},{19, 39.10},
+   {20, 40.08},{21, 44.96},{22, 47.88},{23, 50.94},{24, 52.00},
+   {25, 54.94},{26, 55.85},{27, 58.93},{28, 58.69},{29, 63.55},
+   {30, 65.39},{31, 69.72},{32, 72.61},{33, 74.92},{34, 78.96},
+   {35, 79.90},{36, 83.80},{37, 85.47},{38, 87.62},{39, 88.91},
+   {40, 91.22},{41, 92.91},{42, 95.94},{43, 98.91},{44,101.07},
+   {45,102.91},{46,106.42},{47,107.87},{48,112.41},{49,114.82},
+   {50,118.71},{51,121.75},{52,127.60},{53,126.90},{54,131.29},
+   {55,132.91},{56,137.33},{57,138.91},{58,140.12},{59,140.91},
+   {60,144.24},{61,146.92},{62,150.36},{63,151.97},{64,157.25},
+   {65,158.93},{66,162.50},{67,164.93},{68,167.26},{69,168.93},
+   {70,173.04},{71,174.97},{72,178.49},{73,180.95},{74,183.85},
+   {75,186.21},{76,190.20},{77,192.22},{78,195.08},{79,196.97},
+   {80,200.59},{81,204.38},{82,207.20},{83,208.98},{84,208.98},
+   {85,209.99},{86,222.02},{87,223.02},{88,226.03},{89,227.03},
    {90,232.04},{91,231.04},{92,238.03},{93,237.05},{94,244.06}
 };
 
@@ -87,19 +90,20 @@ static nmass periodicTable[95] = { /* {Z,A} - from SIESTA 3.1 */
 /* Prints the header on 'stdout'.                            */
 void PHONheader ()
 {
-   printf ("\n");
-   printf ("**  *****************************************************  **\n");
-   printf ("**             ** Phonon Vibration Analysis **             **\n");
-   printf ("**                                                         **\n");
-   printf ("**                    **  Version 1  **                    **\n");
-   printf ("**                                                         **\n");
-   printf ("**                         IF/USP                          **\n");
-   printf ("**                                                         **\n");
-   printf ("**   Advisor: Prof. Dr. Alexandre Reily Rocha              **\n");
-   printf ("**                                                         **\n");
-   printf ("**   Author: Pedro Brandimarte Mendonca                    **\n");
-   printf ("**                                                         **\n");
-   printf ("**  *****************************************************  **\n\n");
+   printf("\n");
+   printf("**  *************************************************  **\n");
+   printf("**           ** Phonon Vibration Analysis **           **\n");
+   printf("**                                                     **\n");
+   printf("**                  **  Version 1  **                  **\n");
+   printf("**                                                     **\n");
+   printf("**                       IF/USP                        **\n");
+   printf("**                                                     **\n");
+   printf("**   Advisor: Prof. Dr. Alexandre Reily Rocha          **\n");
+   printf("**                                                     **\n");
+   printf("**   Author: Pedro Brandimarte Mendonca                **\n");
+   printf("**                                                     **\n");
+   printf("**  *************************************************  **\n");
+   printf("\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
 } /* PHONheader */
@@ -143,7 +147,8 @@ static void assignGlobalVar ()
       CHECKfscanf (fscanf (FCinfo, "%d", &species[i].atom.Z), inputFile);
       name[i] = CHECKmalloc (10 * sizeof (char));
       CHECKfscanf (fscanf (FCinfo, "%s", name[i]), inputFile);
-      printf ("\t\t\t\t\t %d %d %s\n", species[i].id, species[i].atom.Z, name[i]);
+      printf ("\t\t\t\t\t %d %d %s\n", species[i].id,
+	      species[i].atom.Z, name[i]);
    }
 
    CHECKfscanf (fscanf (FCinfo, "%d", &nspin), inputFile);
@@ -164,10 +169,12 @@ static void assignGlobalVar ()
       FCdispl = bohr2ang * FCdispl;
    }
    else if (strcmp (FCdisplUnit, "ang") != 0) {
-      fprintf (stderr, "\n ERROR: unrecognized displacement unit \"%s\" at FC",
+      fprintf (stderr,
+	       "\n ERROR: unrecognized displacement unit \"%s\" at FC\n",
 	       FCdisplUnit);
       fprintf (stderr,
-	       "\n        fdf input file! It must be \"Ang\" or \"Bohr\"!\n\n");
+	       "       fdf input file! It must be \"Ang\" or \"Bohr\"!");
+      fprintf (stderr, "\n\n");
       exit (EXIT_FAILURE);
    }
    printf ("    Atoms displacement:\t\t\t%.5f (ang)\n", FCdispl);
@@ -184,8 +191,8 @@ static void assignGlobalVar ()
 	    dynAtoms[i].id = FCfirst + i;
 	    dynAtoms[i].atom.Z = species[j].atom.Z;
 	    dynAtoms[i].atom.A = periodicTable[dynAtoms[i].atom.Z].A;
-	    printf ("\t\t\t\t\t%d %d", dynAtoms[i].id, dynAtoms[i].atom.Z);
-	    printf (" %.2f %s\n", dynAtoms[i].atom.A, name[j]);
+	    printf ("\t\t\t\t\t%d %d %.2f %s\n", dynAtoms[i].id,
+		    dynAtoms[i].atom.Z, dynAtoms[i].atom.A, name[j]);
 	    break ;
 	 }
       }
@@ -276,11 +283,12 @@ static void readOrbitalIndex ()
    printf ("\n    Basis orbitals per unit cell:\t\t%d\n", no_u);
 
    /* First orbital of the first dynamic atom. */
-   printf ("    First orbital from dynamic atom:\t\t%d\n", orbIdx[FCfirst - 1]);
+   printf ("    First orbital from dynamic atom:\t\t%d\n",
+	   orbIdx[FCfirst-1] + 1);
 
    /* Dynamic atoms orbitals quantity. */
    printf ("    Number of dynamic atoms basis orbitals:\t%d\n",
-	   orbIdx[FClast] - orbIdx[FCfirst - 1]);
+	   orbIdx[FClast] - orbIdx[FCfirst-1]);
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
    /* Frees memory. */
@@ -332,7 +340,8 @@ void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot, int *nDynOrb)
    i = system (scriptCall);
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
    if (i != 0) {
-      fprintf (stderr, " ERROR: problem when trying to run 'buildInput.sh' script!\n\n");
+      fprintf (stderr, " ERROR: problem when trying to run");
+      fprintf (stderr, " 'buildInput.sh' script!\n\n");
       exit (EXIT_FAILURE);
    }
 
@@ -351,7 +360,7 @@ void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot, int *nDynOrb)
 
    /* Returns the dimension of 'FC' and 'e-ph' coupling matrices. */
    *nDynTot = 3 * nDyn;
-   *nDynOrb = orbIdx[FClast] - orbIdx[FCfirst - 1];
+   *nDynOrb = orbIdx[FClast] - orbIdx[FCfirst-1];
 
    /* Removes 'inputFC.in' file. */
    scriptCall[0] = '\0';
@@ -379,7 +388,7 @@ static void rmEggBox (double *fullFCM)
       for (k = 0; k < 3; k++) { /* coordinates (x,y,z) */
 	 fullFCM[idx(dyn*3+k,j,3*nAtoms)] = 0.0;
 	 sum = 0.0;
-	 for (i = 0; i < nAtoms; i++) /* sum over all atoms at coordinate 'k' */
+	 for (i = 0; i < nAtoms; i++) /* sum over all atoms coord 'k' */
 	    sum = sum + fullFCM[idx(i*3+k,j,3*nAtoms)];
 	 fullFCM[idx(dyn*3+k,j,3*nAtoms)] = - 1.0 * sum;
       }
@@ -432,24 +441,31 @@ void PHONfreq (double *EigVec, double *EigVal)
    FCM = CHECKfopen (FCMfile, "r");
 
    /* Checks if the file starts correctly. */
-   if ((fgets(check,24,FCM)==NULL) || (strncmp(check,"Force constants matrix",22)!=0)) {
-      fprintf (stderr, " ERROR: the file %s is not written correctly!\n\n", FCMfile);
+   if ((fgets(check,24,FCM)==NULL) ||
+       (strncmp(check,"Force constants matrix",22)!=0)) {
+      fprintf (stderr,
+	       " ERROR: the file %s is not written correctly!\n\n",
+	       FCMfile);
       exit (EXIT_FAILURE);
    }
 
-   /* FC matrix with all atoms [negative (minus) and positive (plus) displacement]. */
+   /* FC matrix with all atoms                             */
+   /* [negative (minus) and positive (plus) displacement]. */
    fullFCneg = CHECKmalloc (3 * nAtoms * 3 * nDyn * sizeof (double));
    fullFCpos = CHECKmalloc (3 * nAtoms * 3 * nDyn * sizeof (double));
 
-   /* Reads the SIESTA FC matrix file (obs.: matrix in column-major order). */
+   /* Reads the SIESTA FC matrix file       */
+   /* (obs.: matrix in column-major order). */
    for (j = 0; j < 3 * nDyn; j++) {
       /* Negative displacement. */
       for (i = 0; i < 3 * nAtoms; i++)
-	 CHECKfscanf (fscanf (FCM, "%lE", &fullFCneg[idx(i,j,3*nAtoms)]), FCMfile);
+	 CHECKfscanf (fscanf (FCM, "%lE",
+			      &fullFCneg[idx(i,j,3*nAtoms)]), FCMfile);
 
       /* Positive displacement. */
       for (i = 0; i < 3 * nAtoms; i++)
-	 CHECKfscanf (fscanf (FCM, "%lE", &fullFCpos[idx(i,j,3*nAtoms)]), FCMfile);
+	 CHECKfscanf (fscanf (FCM, "%lE",
+			      &fullFCpos[idx(i,j,3*nAtoms)]), FCMfile);
    }
 
    /* Closes the SIESTA FC matrix file. */
@@ -464,17 +480,20 @@ void PHONfreq (double *EigVec, double *EigVal)
    printf ("ok!\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
-   /* The SIESTA FC matrix file contains the values of force by           */
-   /* displacement [eV/Ang^2]. In order to compute the Hessian (force     */
-   /* constants matrix) with finite differences, one has only to subtract */
-   /* the value corresponding to the negative displacement by the value   */
-   /* corresponding to the positive displacement and divide by 2.         */
-   printf ("\n Reducing to dynamic atoms dimension and computing finite differences... ");
+   /* The SIESTA FC matrix file contains the values of force    */
+   /* by displacement [eV/Ang^2]. In order to compute the       */
+   /* Hessian (force constants matrix) with finite differences, */
+   /* one has only to subtract the value corresponding to the   */
+   /* negative displacement by the value corresponding to the   */
+   /* positive displacement and divide by 2.                    */
+   printf ("\n Reducing to dynamic atoms dimension");
+   printf (" and computing finite differences... ");
    len = (FCfirst - 1) * 3;
    for (j = 0; j < 3 * nDyn; j++)
       for (i = len; i < FClast * 3; i++)
-	 EigVec[idx(i-len,j,3*nDyn)] = (fullFCneg[idx(i,j,3*nAtoms)] +
-					fullFCpos[idx(i,j,3*nAtoms)]) / 2.0;
+	 EigVec[idx(i-len,j,3*nDyn)] =
+	    (fullFCneg[idx(i,j,3*nAtoms)] +
+	     fullFCpos[idx(i,j,3*nAtoms)]) / 2.0;
    printf ("ok!\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
@@ -484,7 +503,8 @@ void PHONfreq (double *EigVec, double *EigVal)
    printf ("ok!\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
-   /* Prints on screen the reduced, mass-scaled and symmetrized FC matrix. */
+   /* Prints on screen the reduced,          */
+   /* mass-scaled and symmetrized FC matrix. */
    printf ("\n Reduced force constants matrix:\n\n");
    for (i = 0; i < 3 * nDyn; i++) {
       for (j = 0; j < 3 * nDyn; j++)
@@ -500,7 +520,10 @@ void PHONfreq (double *EigVec, double *EigVal)
    printf ("\n Phonon energies (eV):\n\n");
    cst = hbar * sqrt (1.0e20 * eV2joule / amu2kg);
    for (i = 0; i < 3 * nDyn; i++) {
-      EigVal[i] = cst * sqrt(EigVal[i]);
+      if (EigVal[i] < 0.0)
+	 EigVal[i] = 0.0;
+      else
+	 EigVal[i] = cst * sqrt(EigVal[i]);
       printf ("  %d % .5e\n", i + 1, EigVal[i]);
    }
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
@@ -546,7 +569,9 @@ static void readHSfile (char *HSfile, double *H, double *S, int efIdx)
    CHECKfread (fread (&CKnspin, sizeof (int), 1, gHS), 1, HSfile);
    CHECKfread (fread (&maxnhtot, sizeof (int), 1, gHS), 1, HSfile);
    if ((CKno_u != no_u) || (CKnspin != nspin)) {
-      fprintf (stderr, " ERROR: the file %s is not written correctly!\n\n", HSfile);
+      fprintf (stderr,
+	       " ERROR: the file %s is not written correctly!\n\n",
+	       HSfile);
       exit (EXIT_FAILURE);
    }
 
@@ -559,22 +584,26 @@ static void readHSfile (char *HSfile, double *H, double *S, int efIdx)
    /* Reads the number of nonzero elements of each row of H. */
    CHECKfread (fread (numh, no_u * sizeof (int), 1, gHS), 1, HSfile);
 
-   /* Reads the nonzero Hamiltonian-matrix element column indexes for each row. */
+   /* Reads the nonzero Hamiltonian-matrix */
+   /* element column indexes for each row. */
    for (i = 0, k = 0; i < no_u; i++) {
-      CHECKfread (fread (&(listh[k]), numh[i] * sizeof (int), 1, gHS), 1, HSfile);
+      CHECKfread (fread (&(listh[k]),
+			 numh[i]*sizeof(int), 1, gHS), 1, HSfile);
       k = k + numh[i];
    }
 
    /* Reads the Hamiltonian matrix in sparse form. */
    for (j = 0, k = 0; j < nspin; j++)
       for (i = 0; i < no_u; i++) {
-   	 CHECKfread (fread (&(Hsparse[k]), numh[i] * sizeof (double), 1, gHS), 1, HSfile);
+   	 CHECKfread (fread (&(Hsparse[k]),
+			    numh[i]*sizeof(double), 1, gHS), 1, HSfile);
    	 k = k + numh[i];
       }
 
    /* Reads the overlap matrix in sparse form. */
    for (i = 0, k = 0; i < no_u; i++) {
-      CHECKfread (fread (&(Ssparse[k]), numh[i] * sizeof (double), 1, gHS), 1, HSfile);
+      CHECKfread (fread (&(Ssparse[k]),
+			 numh[i]*sizeof (double), 1, gHS), 1, HSfile);
       k = k + numh[i];
    }
 
@@ -638,23 +667,24 @@ static void deltaH (double *dH, double *S0)
       Hfile[0] = '\0';
       sprintf (Hfile, "%s%s_%.3d.gHS", FCdir, sysLabel, 2 * k + 1);
       UTILresetDoubleVector (no_u * no_u, S);
-      readHSfile (Hfile, &Hm[idx3d(0,0,k*nspin,no_u,no_u)], S, 2 * k + 1);
+      readHSfile (Hfile, &Hm[idx3d(0,0,k*nspin,no_u,no_u)], S, 2*k+1);
 
       /* 'H(Q)' */
       Hfile[0] = '\0';
       sprintf (Hfile, "%s%s_%.3d.gHS", FCdir, sysLabel, 2 * k + 2);
       UTILresetDoubleVector (no_u * no_u, S);
-      readHSfile (Hfile, &Hp[idx3d(0,0,k*nspin,no_u,no_u)], S, 2 * k + 2);
+      readHSfile (Hfile, &Hp[idx3d(0,0,k*nspin,no_u,no_u)], S, 2*k+2);
 
-      /* 'dH = {H(Q) - (ef(Q) - ef0) * S0 - [H(-Q) - (ef(-Q) - ef0) * S0]} / 2Q' */
-      /* or, simplifying: 'dH = {H(Q) - H(-Q) - [ef(Q) - ef(-Q)] * S0} / 2Q'     */
+      /* 'dH = {H(Q) - (ef(Q)-ef0)*S0 - [H(-Q)-(ef(-Q)-ef0)*S0]} / 2Q' */
+      /* or, simplifying: 'dH = {H(Q)-H(-Q)-[ef(Q)-ef(-Q)]*S0} / 2Q'   */
       for (s = 0; s < nspin; s++)
       	 for (i = 0; i < no_u; i++)
       	    for (j = 0; j < no_u; j++)
       	       dH[idx3d(i,j,k*nspin+s,no_u,no_u)] = 
 		  (Hp[idx3d(i,j,k*nspin+s,no_u,no_u)]
 		   - Hm[idx3d(i,j,k*nspin+s,no_u,no_u)]
-		   - (ef[2*k+2] - ef[2*k+1]) * S0[idx(i,j,no_u)]) / (2.0 * FCdispl);
+		   - (ef[2*k+2] - ef[2*k+1]) * S0[idx(i,j,no_u)])
+		  / (2.0 * FCdispl);
 
    }
 
@@ -686,7 +716,9 @@ static void readOnlyS (char *Sfile, double *S)
    CHECKfread (fread (&CKno_u, sizeof (int), 1, OnlyS), 1, Sfile);
    CHECKfread (fread (&maxnhtot, sizeof (int), 1, OnlyS), 1, Sfile);
    if (CKno_u != 2 * no_u) {
-      fprintf (stderr, " ERROR: the file %s is not written correctly!\n\n", Sfile);
+      fprintf (stderr,
+	       " ERROR: the file %s is not written correctly!\n\n",
+	       Sfile);
       exit (EXIT_FAILURE);
    }
 
@@ -697,17 +729,20 @@ static void readOnlyS (char *Sfile, double *S)
    listh = UTILintVector (maxnhtot);
 
    /* Reads the number of nonzero elements of each row of S. */
-   CHECKfread (fread (numh, 2 * no_u * sizeof (int), 1, OnlyS), 1, Sfile);
+   CHECKfread (fread (numh, 2*no_u*sizeof(int), 1, OnlyS), 1, Sfile);
 
-   /* Reads the nonzero overlap-matrix element column indexes for each row. */
+   /* Reads the nonzero overlap-matrix     */
+   /* element column indexes for each row. */
    for (i = 0, k = 0; i < 2 * no_u; i++) {
-      CHECKfread (fread (&(listh[k]), numh[i] * sizeof (int), 1, OnlyS), 1, Sfile);
+      CHECKfread (fread (&(listh[k]), numh[i]*sizeof(int),
+			 1, OnlyS), 1, Sfile);
       k = k + numh[i];
    }
 
    /* Reads the overlap matrix in sparse form. */
    for (i = 0, k = 0; i < 2 * no_u; i++) {
-      CHECKfread (fread (&(Ssparse[k]), numh[i] * sizeof (double), 1, OnlyS), 1, Sfile);
+      CHECKfread (fread (&(Ssparse[k]), numh[i]*sizeof(double),
+			 1, OnlyS), 1, Sfile);
       k = k + numh[i];
    }
 
@@ -810,7 +845,8 @@ static void dHCorrection (double *dH, double *H0, double *S0)
    CHECKdgetrf (no_u, invS0, ipiv); /* triangular matrix factorization */
    CHECKdgetri (no_u, invS0, ipiv); /* matrix inversion */
 
-   /* Computes 'dH = dH - dS*S0^-1*H0 - H0*S0^-1*(dS)^T' for each displacement direction. */
+   /* Computes 'dH = dH - dS*S0^-1*H0 - H0*S0^-1*(dS)^T' */
+   /* for each displacement direction.                   */
    printf ("\n    correcting Hamiltonian derivatives elements... ");
    dS = CHECKmalloc (no_u * no_u * sizeof (double));
    Aux = CHECKmalloc (no_u * no_u * sizeof (double));
@@ -831,7 +867,7 @@ static void dHCorrection (double *dH, double *H0, double *S0)
 
 	    /* 'Aux = - dS * S0^-1' */
 	    alpha = - 1.0;
-	    beta = 0.0; /* as 'beta = 0' it's not necessary to reset 'Aux' */
+	    beta = 0.0; /* as 'beta = 0' -> no need to reset 'Aux' */
 	    dgemm ("T","N", &no_u, &no_u, &no_u, &alpha, dS,
 	    	   &no_u, invS0, &no_u, &beta, Aux, &no_u);
 
@@ -843,8 +879,9 @@ static void dHCorrection (double *dH, double *H0, double *S0)
 
 	    /* 'Aux = H0 * S0^-1' */
 	    beta = 0.0;
-	    dgemm ("N","N", &no_u, &no_u, &no_u, &alpha, &H0[idx3d(0,0,s,no_u,no_u)],
-		   &no_u, invS0, &no_u, &beta, Aux, &no_u);
+	    dgemm ("N","N", &no_u, &no_u, &no_u, &alpha,
+		   &H0[idx3d(0,0,s,no_u,no_u)],  &no_u,
+		   invS0, &no_u, &beta, Aux, &no_u);
 
 	    /* 'dH = dH - Aux * (dS)^T' */
 	    alpha = - 1.0;
@@ -872,15 +909,16 @@ static void dHCorrection (double *dH, double *H0, double *S0)
 /* modes ('EigVec') and the Hamiltonian derivatives ('dH'),  */
 /* it computes the elements of the electron-phonon coupling  */
 /* matrix.                                                   */
-static void eph (double *EigVec, double *EigVal, double *dH, double *Meph)
+static void eph (double *EigVec, double *EigVal,
+		 double *dH, double *Meph)
 {
    register int i, j, k, s, l, firstOrb, nOrb;
    double cst;
 
    /* Computes each element of 'Meph'. */
    printf ("    computing the electron-phonon coupling elements... ");
-   firstOrb = orbIdx[FCfirst - 1]; /* first orbital of first dynamic atom */
-   nOrb = orbIdx[FClast] - orbIdx[FCfirst - 1]; /* number of dynamic orbitals */
+   firstOrb = orbIdx[FCfirst - 1]; /* first orb of first dyn atom */
+   nOrb = orbIdx[FClast] - orbIdx[FCfirst - 1]; /* number of dyn orbs */
    cst = hbar * sqrt (1.0e20 * eV2joule / amu2kg);
    for (l = 0; l < 3 * nDyn; l++) /* modes */
       for (k = 0; k < 3 * nDyn; k++) /* coordinates */
@@ -888,9 +926,9 @@ static void eph (double *EigVec, double *EigVal, double *dH, double *Meph)
 	    for (j = 0; j < nOrb; j++)
 	       for (i = 0; i < nOrb; i++)
 		  Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)] +=
-		     dH[idx3d(firstOrb+i,firstOrb+j,k*nspin+s,no_u,no_u)] *
-		     EigVec[idx(k,l,3*nDyn)] * cst /
-		     sqrt (2 * dynAtoms[k/3].atom.A * EigVal[l]);
+		     dH[idx3d(firstOrb+i,firstOrb+j,k*nspin+s,no_u,no_u)]
+		     * EigVec[idx(k,l,3*nDyn)] * cst
+		     / sqrt (2 * dynAtoms[k/3].atom.A * EigVal[l]);
    printf ("ok!\n\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
@@ -915,28 +953,32 @@ static void ephOut (double *EigVal, double *Meph)
    sprintf (ephFile, "%s%s.Meph", FCdir, sysLabel);
 
    /* Opens the '.Meph' file. */
-   printf (" Writing electron-phonon coupling matrix at \"%s\" file... ", ephFile);
+   printf (" Writing electron-phonon coupling matrix at \"%s\" file... ",
+	   ephFile);
    EPH = CHECKfopen (ephFile, "w");
 
    /* Writes the dimensions. */
-   nOrb = orbIdx[FClast] - orbIdx[FCfirst - 1]; /* number of dynamic orbitals */
-   fprintf (EPH, "%d  %d  %d  %d  %d\n\n", nspin, nDyn, nOrb, orbIdx[FCfirst], orbIdx[FClast]);
+   nOrb = orbIdx[FClast] - orbIdx[FCfirst - 1]; /* number of dyn orbs */
+   fprintf (EPH, "%d  %d  %d  %d  %d\n\n", nspin, nDyn,
+	    nOrb, orbIdx[FCfirst-1]+1, orbIdx[FCfirst-1]+nOrb);
 
    /* Prints the phonon frequencies. */
    for (l = 3 * nDyn - 1; l >= 0; l--)
-      fprintf (EPH, "%.10E  ", EigVal[l]);
+      fprintf (EPH, "%.10e  ", EigVal[l]);
    fprintf (EPH, "\n\n");
 
    /* Prints the electron-phonon coupling matrix. */
    for (l = 3 * nDyn - 1; l >= 0; l--)
-      for (s = 0; s < nspin; s++) {
-	 for (i = 0; i < nOrb; i++) {
-	    for (j = 0; j < nOrb; j ++)
-	       fprintf (EPH, " (% .15e,0.000000000000000e00)", Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]);
+      if (EigVal[l] > 0.0)
+	 for (s = 0; s < nspin; s++) {
+	    for (i = 0; i < nOrb; i++) {
+	       for (j = 0; j < nOrb; j ++)
+		  fprintf (EPH, " (% .15e,0.0e+00)",
+			   Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]);
+	       fprintf (EPH, "\n");
+	    }
 	    fprintf (EPH, "\n");
 	 }
-	 fprintf (EPH, "\n");
-      }
 
    /* /\* for (l = 0; l < 3 * nDyn; l++) *\/ */
    /* for (l = 3 * nDyn - 1; l >= 0; l--) */
@@ -945,7 +987,8 @@ static void ephOut (double *EigVal, double *Meph)
    /* 	 fprintf (EPH, "%d %.10E\n\n", s + 1, EigVal[l]); */
    /* 	 for (i = 0; i < nOrb; i++) { */
    /* 	    for (j = 0; j < nOrb; j ++) */
-   /* 	       fprintf (EPH, " (% .15e,0.000000000000000e00)", Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]); */
+   /* 	       fprintf (EPH, " (% .15e,0.000000000000000e00)", */
+   /*                   Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]); */
    /* 	    fprintf (EPH, "\n"); */
    /* 	 } */
    /* 	 fprintf (EPH, "\n"); */
@@ -984,7 +1027,7 @@ void PHONephCoupling (double *EigVec, double *EigVal, double *Meph)
    sprintf (HSfile, "%s%s_%.3d.gHS", FCdir, sysLabel, 0);
    readHSfile (HSfile, H0, S0, 0);
 
-   /* Computes 'dH = {H(Q) - (ef(Q) - ef0) * S0 - [H(-Q) - (ef(-Q) - ef0) * S0]} / 2Q'. */
+   /* Computes 'dH={H(Q)-(ef(Q)-ef0)*S0-[H(-Q)-(ef(-Q)-ef0)*S0]}/2Q'. */
    printf ("\n 'H' matrix derivative:\n\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
    dH = UTILdoubleVector (3 * nDyn * nspin * no_u * no_u);
@@ -992,7 +1035,8 @@ void PHONephCoupling (double *EigVec, double *EigVal, double *Meph)
 
    /* Applies a correction due to the change in basis orbitals with */
    /* displacements: 'dH = dH - dS * S^-1 * H0 - H0 * S^-1 * dS'.   */
-   printf ("\n 'dH' correction due to the changes in basis orbitals:\n\n");
+   printf ("\n 'dH' correction due to the changes in basis orbitals:");
+   printf ("\n\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
    dHCorrection (dH, H0, S0);
 
