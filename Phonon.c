@@ -579,7 +579,7 @@ static void readHSfile (char *HSfile, double *H, double *S, int efIdx)
    Hsparse = UTILdoubleVector (nspin * maxnhtot);
    Ssparse = UTILdoubleVector (maxnhtot);
    numh = UTILintVector (no_u);
-   listh = UTILintVector (maxnhtot);
+   listh = UTILintVector (nspin * maxnhtot);
 
    /* Reads the number of nonzero elements of each row of H. */
    CHECKfread (fread (numh, no_u * sizeof (int), 1, gHS), 1, HSfile);
