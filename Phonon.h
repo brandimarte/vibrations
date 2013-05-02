@@ -40,7 +40,8 @@
 void PHONheader ();
 
 /* Collects required informations from FC input 'fdf' file. */
-void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot, int *nDynOrb);
+void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot,
+		    int *nDynOrb, int *spinPol);
 
 /* Computes phonon frequencies and modes. */
 void PHONfreq (double *EigVec, double *EigVal);

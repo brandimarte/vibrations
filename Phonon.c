@@ -302,7 +302,8 @@ static void readOrbitalIndex ()
 /* input 'fdf' file and writes them at 'inputFC.in' file.    */
 /* Calls 'assignGlobalVar' function to assign global         */
 /* variables.                                                */
-void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot, int *nDynOrb)
+void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot,
+		    int *nDynOrb, int *spinPol)
 {
    register int i, len;
    char *scriptCall;
@@ -361,6 +362,7 @@ void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot, int *nDynOrb)
    /* Returns the dimension of 'FC' and 'e-ph' coupling matrices. */
    *nDynTot = 3 * nDyn;
    *nDynOrb = orbIdx[FClast] - orbIdx[FCfirst-1];
+   *spinPol = nspin;
 
    /* Removes 'inputFC.in' file. */
    scriptCall[0] = '\0';

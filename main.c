@@ -32,7 +32,7 @@
 
 int main (int nargs, char *arg[])
 {
-   int nDynTot, nDynOrb;
+   int nDynTot, nDynOrb, spinPol;
    double *EigVec, *EigVal, *Meph;
    double time;
    clock_t inicial, final;
@@ -53,7 +53,7 @@ int main (int nargs, char *arg[])
    PHONheader ();
 
    /* Reads info from FC fdf input file. */
-   PHONreadFCfdf (arg[0], arg[1], &nDynTot, &nDynOrb);
+   PHONreadFCfdf (arg[0], arg[1], &nDynTot, &nDynOrb, &spinPol);
 
    /* Computes phonon frequencies. */
    EigVec = UTILdoubleVector (nDynTot * nDynTot);
@@ -61,7 +61,7 @@ int main (int nargs, char *arg[])
    PHONfreq (EigVec, EigVal);
 
    /* Computes electron-phonon coupling matrices. */
-   Meph = UTILdoubleVector (nDynOrb * nDynOrb * nDynTot);
+   Meph = UTILdoubleVector (nDynOrb * nDynOrb * nDynTot * spinPol);
    PHONephCoupling (EigVec, EigVal, Meph);
 
    /* Frees memory. */
