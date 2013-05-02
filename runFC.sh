@@ -150,7 +150,7 @@ fi
 echo -e "vibranal: Running FC calculation...\n\n"
 ${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
 wait
-rm Chain.alloc Chain.BONDS Chain.STRUCT_* INPUT_TMP.*
+rm *.alloc *.BONDS* *.STRUCT_* INPUT_TMP.*
 
 # Sets FC 'fdf' input file with the flag 'PB.FCwriteHS .false.'.
 echo -e "\nvibranal: Including the option 'PB.FCwriteHS .false.' at 'pbFCrun.fdf' file.\n"
@@ -187,6 +187,9 @@ if [ "${aunit}" == "" ]
 then
     echo -e "\nvibranal: ERROR: can't find the 'AtomicCoordinatesFormat' at FC fdf input file!\n"
     exit -1
+elif [ "${aunit}" == "notscaledcartesianang" ]
+then
+    aunit="ang"
 elif [ "${aunit}" != "bohr" ]
 then
     if [ "${aunit}" != "ang" ]
@@ -298,7 +301,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 echo -e "vibranal: Running 'onlyS' calculation for '-x' direction...\n\n"
 ${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
 wait
-rm Chain_1.alloc Chain_1.BONDS Chain_1.KP Chain_1.STRUCT_* INPUT_TMP.*
+rm *_1.alloc *_1.BONDS* *_1.KP *_1.STRUCT_* INPUT_TMP.*
 
 # 2. '+x' move.
 echo -e "vibranal: Changing the system label to '${slabel}_2'.\n"
@@ -317,7 +320,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 echo -e "vibranal: Running 'onlyS' calculation for '+x' direction...\n\n"
 ${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
 wait
-rm Chain_2.alloc Chain_2.BONDS Chain_2.KP Chain_2.STRUCT_* INPUT_TMP.*
+rm *_2.alloc *_2.BONDS* *_2.KP *_2.STRUCT_* INPUT_TMP.*
 
 # 3. '-y' move.
 echo -e "vibranal: Changing the system label to '${slabel}_3'.\n"
@@ -336,7 +339,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 echo -e "vibranal: Running 'onlyS' calculation for '-y' direction...\n\n"
 ${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
 wait
-rm Chain_3.alloc Chain_3.BONDS Chain_3.KP Chain_3.STRUCT_* INPUT_TMP.*
+rm *_3.alloc *_3.BONDS* *_3.KP *_3.STRUCT_* INPUT_TMP.*
 
 # 4. '+y' move.
 echo -e "vibranal: Changing the system label to '${slabel}_4'.\n"
@@ -355,7 +358,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 echo -e "vibranal: Running 'onlyS' calculation for '+y' direction...\n\n"
 ${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
 wait
-rm Chain_4.alloc Chain_4.BONDS Chain_4.KP Chain_4.STRUCT_* INPUT_TMP.*
+rm *_4.alloc *_4.BONDS* *_4.KP *_4.STRUCT_* INPUT_TMP.*
 
 # 5. '-z' move.
 echo -e "vibranal: Changing the system label to '${slabel}_5'.\n"
@@ -374,7 +377,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 echo -e "vibranal: Running 'onlyS' calculation for '-z' direction...\n\n"
 ${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
 wait
-rm Chain_5.alloc Chain_5.BONDS Chain_5.KP Chain_5.STRUCT_* INPUT_TMP.*
+rm *_5.alloc *_5.BONDS* *_5.KP *_5.STRUCT_* INPUT_TMP.*
 
 # 6. '+z' move.
 echo -e "vibranal: Changing the system label to '${slabel}_6'.\n"
@@ -393,7 +396,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 echo -e "vibranal: Running 'onlyS' calculation for '+z' direction...\n\n"
 ${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
 wait
-rm Chain_6.alloc Chain_6.BONDS Chain_6.KP Chain_6.STRUCT_* INPUT_TMP.*
+rm *_6.alloc *_6.BONDS* *_6.KP *_6.STRUCT_* INPUT_TMP.*
 
 # Finishing.
 rm ${FCdir}pbCoord.tmp
