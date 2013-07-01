@@ -60,6 +60,9 @@ int main (int nargs, char *arg[])
    EigVal = UTILdoubleVector (nDynTot);
    PHONfreq (EigVec, EigVal);
 
+   /* Writes a 'xyz' file for each computed phonon mode. */
+   PHONjmolVib (EigVec, EigVal);
+
    /* Computes electron-phonon coupling matrices. */
    Meph = UTILdoubleVector (nDynOrb * nDynOrb * nDynTot * spinPol);
    PHONephCoupling (EigVec, EigVal, Meph);

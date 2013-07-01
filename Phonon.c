@@ -50,6 +50,15 @@ struct CHEMIC {
    nmass atom; /* atomic number and mass */
 };
 
+/* Structure for 'xyz' coordinates. */
+typedef struct ATCOORD xyzcoord;
+struct ATCOORD {
+   char name[2]; /* element specie */
+   double x; /* x coordinate */
+   double y; /* y coordinate */
+   double z; /* z coordinate */
+};
+
 static char *workDir; /* work directory */
 static char *FCdir; /* FC directory */
 static char sysLabel[30]; /* system label */
@@ -548,6 +557,103 @@ void PHONfreq (double *EigVec, double *EigVal)
    free (FCMfile);
 
 } /* PHONfreq */
+
+
+/* ********************************************************* */
+/* Reads the SIESTA 'xyz' file and write 'xyz's files for    */
+/* each computed phonon mode.                                */
+void PHONjmolVib (double *EigVec, double *EigVal)
+{
+   register int i, j, k, len;
+   int aux;
+   xyzcoord *coord;
+   char check[25];
+   char *XYZfile, *JMOLfile;
+   FILE *XYZ, *JMOL;
+
+   /* Sets the SIESTA 'xyz' file name with 'FCdir' path. */
+   len = strlen (FCdir);
+   len += strlen (sysLabel);
+   XYZfile = CHECKmalloc ((len + 5) * sizeof (char));
+   sprintf (XYZfile, "%s%s.xyz", FCdir, sysLabel);
+
+   /* Opens the SIESTA 'xyz' file. */
+   printf ("\n Reading %s file... ", XYZfile);
+   XYZ = CHECKfopen (XYZfile, "r");
+
+   /* Checks if the file starts correctly. */
+   CHECKfscanf (fscanf (XYZ, "%d", &aux), XYZfile);
+   if (aux != nAtoms) {
+      fprintf (stderr,
+	       " ERROR: the file %s is not written correctly!\n\n",
+	       XYZfile);
+      exit (EXIT_FAILURE);
+   }
+
+   /* Allocs structure for atomic species and coordinates. */
+   coord = CHECKmalloc (nAtoms * sizeof (xyzcoord));
+
+   /* Reads the SIESTA 'xyz' file. */
+   for (i = 0; i < nAtoms; i++)
+      CHECKfscanf (fscanf (XYZ, "%s %le %le %le",
+			   coord[i].name, &coord[i].x,
+			   &coord[i].y, &coord[i].z), XYZfile);
+
+   /* Closes the SIESTA 'xyz' file. */
+   CHECKfclose (fclose (XYZ), XYZfile);
+   printf ("ok!\n\n");
+   setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
+
+   /* Sets the path for the output Jmol files. */
+   len = strlen (workDir);
+   len += strlen (sysLabel);
+   JMOLfile = CHECKmalloc ((len + 12) * sizeof (char));
+
+   for (i = 0, j = 1; i < nDyn * 3; i++) {
+      if (EigVal[i] > 0.0) {
+         
+	 /* Opens the JMOL 'xyz' output file. */
+	 sprintf (JMOLfile, "%s%sJMOL%d.xyz", workDir, sysLabel, j);
+	 printf (" Writing %s file... ", JMOLfile);
+	 JMOL = CHECKfopen (JMOLfile, "w");
+
+	 fprintf (JMOL, "   %d\n\n", nAtoms);
+
+	 /* Writes only the coordinates. */
+	 for (k = 0; k < FCfirst - 1; k++)
+	    fprintf (JMOL, "%s\t% le\t% le\t% le\n", coord[k].name,
+		     coord[k].x, coord[k].y, coord[k].z);
+
+	 
+	 /* Writes the coordinates and the normalized phonon mode. */
+	 for (k = FCfirst - 1; k < FClast; k++)
+	    fprintf (JMOL, "%s\t% le\t% le\t% le\t% le\t% le\t% le\n",
+		     coord[k].name, coord[k].x, coord[k].y, coord[k].z,
+		     EigVec[idx(3*(k-FCfirst+1),i,3*nDyn)],
+		     EigVec[idx(3*(k-FCfirst+1)+1,i,3*nDyn)],
+		     EigVec[idx(3*(k-FCfirst+1)+2,i,3*nDyn)]);
+
+	 /* Writes only the coordinates. */
+	 for (k = FClast; k < nAtoms; k++)
+	    fprintf (JMOL, "%s\t% le\t% le\t% le\n", coord[k].name,
+		     coord[k].x, coord[k].y, coord[k].z);
+
+	 /* Closes the JMOL 'xyz' output file. */
+	 CHECKfclose (fclose (JMOL), JMOLfile);
+	 printf ("ok!\n");
+	 setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
+
+	 j++;
+      }
+
+   } /* for (i = 0, j = 1; ...  */
+
+   /* Frees memory. */
+   free (coord);
+   free (XYZfile);
+   free (JMOLfile);
+
+} /* PHONjmolVib */
 
 
 /* ********************************************************* */

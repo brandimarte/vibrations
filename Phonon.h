@@ -46,5 +46,8 @@ void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot,
 /* Computes phonon frequencies and modes. */
 void PHONfreq (double *EigVec, double *EigVal);
 
+/* Writes a 'xyz' file for each computed phonon mode. */
+void PHONjmolVib (double *EigVec, double *EigVal);
+
 /* Computes electron-phonon coupling matrices. */
 void PHONephCoupling (double *EigVec, double *EigVal, double *Meph);
