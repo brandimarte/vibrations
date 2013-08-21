@@ -567,7 +567,6 @@ void PHONjmolVib (double *EigVec, double *EigVal)
    register int i, j, k, len;
    int aux;
    xyzcoord *coord;
-   char check[25];
    char *XYZfile, *JMOLfile;
    FILE *XYZ, *JMOL;
 

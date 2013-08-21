@@ -1,0 +1,50 @@
+#  *****************************************************  #
+#             ** Phonon Vibration Analysis **             #
+#                                                         #
+#                    **  Version 2  **                    #
+#                                                         #
+#                         IF/USP                          #
+#                                                         #
+#   Advisor: Prof. Dr. Alexandre Reily Rocha              #
+#                                                         #
+#   Author: Pedro Brandimarte Mendonca                    #
+#                                                         #
+#   File: Makefile.grid                                   #
+#                                                         #
+#  *****************************************************  #
+#  Makefile to build 'vibranal' code.                     #
+#  *****************************************************  #
+
+export LC_ALL=en_US
+
+CFLAGS  = -I. -Wall -ansi -O2 -axSSE2 -mp1 \
+          -static-intel -static-libgcc
+MKL     = /opt/intel/composer_xe_2013.1.117/mkl
+MKLLIBS = $(MKL)/lib/intel64/libmkl_intel_lp64.a \
+          $(MKL)/lib/intel64/libmkl_sequential.a \
+          $(MKL)/lib/intel64/libmkl_core.a
+LDLIBS  = -Wl,--start-group $(MKLLIBS) -Wl,--end-group -lpthread -lm
+
+RM = /bin/rm -f
+CC = icc
+
+#  *****************************************************  #
+
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c
+
+.c:
+	make $*.o
+	$(CC) $(CFLAGS) -o $* $*.o $(LDLIBS) 
+
+#  *****************************************************  #
+
+vibranal: Check.o Utils.o Phonon.o main.o
+	$(CC) $(CFLAGS) -o vibranal Check.o \
+	Utils.o Phonon.o main.o $(LDLIBS)
+
+#  *****************************************************  #
+
+clean:
+	$(RM) *~ \#~ .\#* *.o vibranal core a.out
+
