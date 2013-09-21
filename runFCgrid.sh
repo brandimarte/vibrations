@@ -47,11 +47,11 @@ echo -e "**                                                         **"
 echo -e "**  *****************************************************  **"
 
 # Checks if the number of arguments is correct.
-if [ ${#} != 4 ]
+if [ ${#} != 3 ]
 then
     echo -e "\nvibranal: ERROR: wrong number of arguments!\n"
-    echo -e "vibranal: Use: ./runFC.sh [mpi compiler] [file mapping procs] \ "
-    echo -e "                 [SIESTA executable] [FC calculation directory]\n"
+    echo -e "vibranal: Use: ./runFC.sh [mpi compiler] [SIESTA executable] \ "
+    echo -e "               [FC calculation directory]\n"
     exit -1
 fi
 
@@ -61,16 +61,13 @@ echo -n "vibranal: Start of run: "
 date
 begin=$(date +%s%N) # initial time with nanoseconds accuracy
 
-# Number of cores.
-cores=$[ `cat ${2} | wc -l` ]
-
 # FC and work directories.
-check=`echo "${4}" | sed 's:.*\(.$\):\1:'`
+check=`echo "${3}" | sed 's:.*\(.$\):\1:'`
 if [ "${check}" == "/" ]
 then
-    FCdir=${4}
+    FCdir=${3}
 else
-    FCdir=${4}/
+    FCdir=${3}/
 fi
 
 # Checks if the files and FC folder exists and are accessible.
@@ -80,13 +77,9 @@ if [ ! -r ${2} ]
 then
     echo -e "\nvibranal: ERROR: the file \"${2}\" doesn't exist or is not accessible!\n"
     exit -1
-elif [ ! -r ${3} ]
+elif [ ! -x ${2} ]
 then
-    echo -e "\nvibranal: ERROR: the file \"${3}\" doesn't exist or is not accessible!\n"
-    exit -1
-elif [ ! -x ${3} ]
-then
-    echo -e "\nvibranal: ERROR: you don't have permission to execute \"${3}\"!\n"
+    echo -e "\nvibranal: ERROR: you don't have permission to execute \"${2}\"!\n"
     exit -1
 elif [ ! -r ${FCdir} ]
 then
@@ -148,7 +141,7 @@ fi
 
 # Submits the job.
 echo -e "vibranal: Running FC calculation...\n\n"
-${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
+${1} ${2} < ${FCfdf}
 wait
 rm *.alloc *.BONDS* *.STRUCT_* INPUT_TMP.*
 
@@ -302,7 +295,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 
 # Submits the job.
 echo -e "vibranal: Running 'onlyS' calculation for '-x' direction...\n\n"
-${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
+${1} ${2} < ${FCfdf}
 wait
 rm *_1.alloc *_1.BONDS* *_1.KP *_1.STRUCT_* INPUT_TMP.*
 
@@ -321,7 +314,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 
 # Submits the job.
 echo -e "vibranal: Running 'onlyS' calculation for '+x' direction...\n\n"
-${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
+${1} ${2} < ${FCfdf}
 wait
 rm *_2.alloc *_2.BONDS* *_2.KP *_2.STRUCT_* INPUT_TMP.*
 
@@ -340,7 +333,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 
 # Submits the job.
 echo -e "vibranal: Running 'onlyS' calculation for '-y' direction...\n\n"
-${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
+${1} ${2} < ${FCfdf}
 wait
 rm *_3.alloc *_3.BONDS* *_3.KP *_3.STRUCT_* INPUT_TMP.*
 
@@ -359,7 +352,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 
 # Submits the job.
 echo -e "vibranal: Running 'onlyS' calculation for '+y' direction...\n\n"
-${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
+${1} ${2} < ${FCfdf}
 wait
 rm *_4.alloc *_4.BONDS* *_4.KP *_4.STRUCT_* INPUT_TMP.*
 
@@ -378,7 +371,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 
 # Submits the job.
 echo -e "vibranal: Running 'onlyS' calculation for '-z' direction...\n\n"
-${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
+${1} ${2} < ${FCfdf}
 wait
 rm *_5.alloc *_5.BONDS* *_5.KP *_5.STRUCT_* INPUT_TMP.*
 
@@ -397,7 +390,7 @@ echo -e "%endblock AtomicCoordinatesAndAtomicSpecies" >> ${FCdir}pbCoord.fdf
 
 # Submits the job.
 echo -e "vibranal: Running 'onlyS' calculation for '+z' direction...\n\n"
-${1} -n ${cores} -machinefile ${2} ${3} < ${FCfdf}
+${1} ${2} < ${FCfdf}
 wait
 rm *_6.alloc *_6.BONDS* *_6.KP *_6.STRUCT_* INPUT_TMP.*
 
