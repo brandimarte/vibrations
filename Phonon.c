@@ -609,7 +609,6 @@ void PHONjmolVib (double *EigVec, double *EigVal)
    JMOLfile = CHECKmalloc ((len + 12) * sizeof (char));
 
    for (i = 0, j = 1; i < nDyn * 3; i++) {
-      if (EigVal[i] > 0.0) {
          
 	 /* Opens the JMOL 'xyz' output file. */
 	 sprintf (JMOLfile, "%s%sJMOL%d.xyz", workDir, sysLabel, j);
@@ -623,7 +622,6 @@ void PHONjmolVib (double *EigVec, double *EigVal)
 	    fprintf (JMOL, "%s\t% le\t% le\t% le\n", coord[k].name,
 		     coord[k].x, coord[k].y, coord[k].z);
 
-	 
 	 /* Writes the coordinates and the normalized phonon mode. */
 	 for (k = FCfirst - 1; k < FClast; k++)
 	    fprintf (JMOL, "%s\t% le\t% le\t% le\t% le\t% le\t% le\n",
@@ -643,7 +641,6 @@ void PHONjmolVib (double *EigVec, double *EigVal)
 	 setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
 	 j++;
-      }
 
    } /* for (i = 0, j = 1; ...  */
 
