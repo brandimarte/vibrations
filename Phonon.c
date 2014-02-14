@@ -311,8 +311,9 @@ static void readOrbitalIndex ()
 /* input 'fdf' file and writes them at 'inputFC.in' file.    */
 /* Calls 'assignGlobalVar' function to assign global         */
 /* variables.                                                */
-void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot,
-		    int *nDynOrb, int *spinPol)
+void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
+		    char *FCsplit, int *nDynTot, int *nDynOrb,
+		    int *spinPol)
 {
    register int i, len;
    char *scriptCall;
@@ -320,10 +321,15 @@ void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot,
    /* For calling the script, one should use a string     */
    /* like this: "[script name with path] [FC directory]" */
    len = strlen (FCpath);
-   scriptCall = CHECKmalloc ((len + 15) * sizeof (char));
-   scriptCall[0] = '\0';   
+   len = len + strlen (FCinput);
+   scriptCall = CHECKmalloc ((len + 16) * sizeof (char));
+   scriptCall[0] = '\0';
    strcat (scriptCall, "buildInput.sh ");
    strcat (scriptCall, FCpath);
+   strcat (scriptCall, " ");
+   strcat (scriptCall, FCinput);
+   strcat (scriptCall, " ");
+   strcat (scriptCall, FCsplit);
 
    /* Assigns the work directory global variable. */
    len = strlen (exec);
@@ -531,11 +537,13 @@ void PHONfreq (double *EigVec, double *EigVal)
    printf ("\n Phonon energies (eV):\n\n");
    cst = hbar * sqrt (1.0e20 * eV2joule / amu2kg);
    for (i = 0; i < 3 * nDyn; i++) {
-      if (EigVal[i] < 0.0)
+      if (EigVal[i] < 0.0) {
+	 printf ("  %d % .5e\n", i + 1, - cst * sqrt(-EigVal[i]));
 	 EigVal[i] = 0.0;
-      else
+      } else {
 	 EigVal[i] = cst * sqrt(EigVal[i]);
-      printf ("  %d % .5e\n", i + 1, EigVal[i]);
+	 printf ("  %d % .5e\n", i + 1, EigVal[i]);
+      }
    }
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
@@ -562,7 +570,7 @@ void PHONfreq (double *EigVec, double *EigVal)
 /* ********************************************************* */
 /* Reads the SIESTA 'xyz' file and write 'xyz's files for    */
 /* each computed phonon mode.                                */
-void PHONjmolVib (double *EigVec, double *EigVal)
+void PHONjmolVib (double *EigVec)
 {
    register int i, j, k, len;
    int aux;

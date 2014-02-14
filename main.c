@@ -38,11 +38,16 @@ int main (int nargs, char *arg[])
    clock_t inicial, final;
 
    /* Checks if the input were typed correctly. */
-   if (nargs != 2) {
+   if (nargs < 3 || nargs > 4) {
       fprintf (stderr, "\n\n Wrong number of arguments!\n");
       fprintf (stderr, "\n Use: vibranal"); /* arg[0] */
-      fprintf (stderr, " [FC directory]\n\n"); /* arg[1] */
-      fprintf (stderr, " Example: vibranal ~/MySystem/FCcalc\n\n");
+      fprintf (stderr, " [FC directory]"); /* arg[1] */
+      fprintf (stderr, " [FC input file]"); /* arg[2] */
+      fprintf (stderr, " [splitFC]\n\n"); /* arg[3] */
+      fprintf (stderr,
+	   " Examples : vibranal ~/MySystem/FCdir runFC.in\n");
+      fprintf (stderr,
+           "            vibranal ~/MySystem/FCdir runFC.in splitFC\n\n");
       exit (EXIT_FAILURE);
    }
 
@@ -53,7 +58,12 @@ int main (int nargs, char *arg[])
    PHONheader ();
 
    /* Reads info from FC fdf input file. */
-   PHONreadFCfdf (arg[0], arg[1], &nDynTot, &nDynOrb, &spinPol);
+   if (nargs == 3)
+      PHONreadFCfdf (arg[0], arg[1], arg[2], " ",
+		     &nDynTot, &nDynOrb, &spinPol);
+   else
+      PHONreadFCfdf (arg[0], arg[1], arg[2], arg[3],
+		     &nDynTot, &nDynOrb, &spinPol);
 
    /* Computes phonon frequencies. */
    EigVec = UTILdoubleVector (nDynTot * nDynTot);
@@ -61,7 +71,7 @@ int main (int nargs, char *arg[])
    PHONfreq (EigVec, EigVal);
 
    /* Writes a 'xyz' file for each computed phonon mode. */
-   PHONjmolVib (EigVec, EigVal);
+   PHONjmolVib (EigVec);
 
    /* Computes electron-phonon coupling matrices. */
    Meph = UTILdoubleVector (nDynOrb * nDynOrb * nDynTot * spinPol);

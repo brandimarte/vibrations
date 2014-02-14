@@ -40,14 +40,15 @@
 void PHONheader ();
 
 /* Collects required informations from FC input 'fdf' file. */
-void PHONreadFCfdf (char *exec, char *FCpath, int *nDynTot,
-		    int *nDynOrb, int *spinPol);
+void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
+		    char *FCsplit, int *nDynTot, int *nDynOrb,
+		    int *spinPol);
 
 /* Computes phonon frequencies and modes. */
 void PHONfreq (double *EigVec, double *EigVal);
 
 /* Writes a 'xyz' file for each computed phonon mode. */
-void PHONjmolVib (double *EigVec, double *EigVal);
+void PHONjmolVib (double *EigVec);
 
 /* Computes electron-phonon coupling matrices. */
 void PHONephCoupling (double *EigVec, double *EigVal, double *Meph);

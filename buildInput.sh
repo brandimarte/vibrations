@@ -1,26 +1,50 @@
 #!/bin/bash
 
-#  *****************************************************  #
-#             ** Phonon Vibration Analysis **             #
-#                                                         #
-#                    **  Version 2  **                    #
-#                                                         #
-#                         IF/USP                          #
-#                                                         #
-#   Advisor: Prof. Dr. Alexandre Reily Rocha              #
-#                                                         #
-#   Author: Pedro Brandimarte Mendonca                    #
-#                                                         #
-#   File: buildInput.sh                                   #
-#                                                         #
-#   Versions: 1 - 10/10/2012                              #
-#             2 - 08/01/2013                              #
-#                                                         #
-#  *****************************************************  #
-#  This script collects required informations from the    #
-#  input 'fdf' file of a previous force constants (FC)    #
-#  run and puts at 'inputFC.in' file.                     #
-#  *****************************************************  #
+#  *******************************************************************  #
+#                       ** Vibration Analysis **                        #
+#                                                                       #
+#                           **  Version 2  **                           #
+#                                                                       #
+#                                IF/USP                                 #
+#                                                                       #
+#  Written by Pedro Brandimarte (brandimarte@gmail.com)                 #
+#                                                                       #
+#  Copyright (c), All Rights Reserved                                   #
+#                                                                       #
+#  This program is free software. You can redistribute it and/or        #
+#  modify it under the terms of the GNU General Public License          #
+#  (version 3 or later) as published by the Free Software Foundation    #
+#  <http://fsf.org/>.                                                   #
+#                                                                       #
+#  This program is distributed in the hope that it will be useful, but  #
+#  WITHOUT ANY WARRANTY, without even the implied warranty of           #
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU     #
+#  General Public License for more details (file 'LICENSE_GPL'          #
+#  distributed along with this program or at                            #
+#  <http://www.gnu.org/licenses/gpl.html>).                             #
+#  *******************************************************************  #
+#                             buildInput.sh                             #
+#  *******************************************************************  #
+#  This script collects required informations from the input 'fdf'      #
+#  file of a previous force constants (FC) run and copies them at       #
+#  'inputFC.in' file. Concatenates the '.FC' files at 'FC*' folders     #
+#  and copies '.gHS' files at 'FC*' folders, renaming them              #
+#  accordingly.                                                         #
+#                                                                       #
+#  Input:  ${1} :  FC calculation main directory                        #
+#          ${2} :  FC input file                                        #
+#          ${3} :  splitFC (optional)                                   #
+#                                                                       #
+#  Use: ./buildInputs.sh [FC calculation directory] [FC input file]     #
+#                                                                       #
+#  Written by Pedro Brandimarte, Feb 2014.                              #
+#  Instituto de Fisica                                                  #
+#  Universidade de Sao Paulo                                            #
+#  e-mail: brandimarte@gmail.com                                        #
+#  ***************************** HISTORY *****************************  #
+#  Original version:    October 2012                                    #
+#                       February 2014                                   #
+#  *******************************************************************  #
 
 # FC directory
 check=`echo "${1}" | sed 's:.*\(.$\):\1:'`
@@ -31,72 +55,70 @@ else
     FCdir=${1}/
 fi
 
-# Checks if FC directory exists and is readable.
-echo -n " Checking FC data path... "
+# Checks if the files and FC folder exists and are accessible.
+echo -e ""
+echo -n " Checking input... "
 if [ ! -r ${FCdir} ]
 then
-    echo -e "ERROR: the directory \"${FCdir}\" doesn't exist or is not accessible!\n"
+    echo -e "\nvibranal: ERROR: the directory \"${FCdir}\" doesn't"     \
+	"exist or is not accessible!\n"
+    exit -1
+elif [ ! -r ${FCdir}${2} ]
+then
+    echo -e "\nvibranal: ERROR: the file \"${2}\" doesn't exist or is"  \
+	"not accessible!\n"
     exit -1
 else
     echo -e "ok!\n"
 fi
 
 # Gets '.fdf' files.
-if ls ${FCdir}*.fdf > /dev/null 2>&1
-then
-    > ${FCdir}FCfdf.tmp
-    FCfdf=`ls ${FCdir}*.fdf`
-    echo -e " FC fdf input files found:"
-    for fdf in ${FCfdf}
-    do
-	echo -e "\t\t\t\t${fdf}"
-        # Copies to 'FCfdf.tmp' without comented lines.
-	sed '/^[#]\+/d' ${fdf} >> ${FCdir}FCfdf.tmp
-    done
-else
-    echo -e " ERROR: couldn't find any FC fdf input file at \"${FCdir}\"!\n"
-    exit -1
-fi
+> ${FCdir}FCfdf.tmp
+for fdf in ${FCdir}${2}
+do
+    # Copies to 'FCfdf.tmp' without comented lines.
+    sed '/^[#]/d' ${fdf} >> ${FCdir}FCfdf.tmp
+done
 FCfdf=${FCdir}FCfdf.tmp
 
 # Puts all required data at 'inputFC.in'.
-echo -e ""
 echo -n " Writing required data at '${FCdir}inputFC.in'... "
 > ${FCdir}inputFC.in
 
-check=`grep -i "SYSTEMLABEL" ${FCfdf} | awk '{print $2}'`
-if [ "${check}" == "" ]
+slabel=`grep -i "SYSTEMLABEL" ${FCfdf} | awk '{print $2}'`
+if [ "${slabel}" == "" ]
 then
-    echo -e "ERROR: can't find the 'SystemLabel' at FC fdf input file!\n"
+    echo -e "ERROR: can't find the 'SystemLabel' at FC input file!\n"
     exit -1
 else
-    echo -e ${check} >> ${FCdir}inputFC.in
+    echo -e ${slabel} >> ${FCdir}inputFC.in
 fi
 
-check=`grep -i "NUMBEROFATOMS" ${FCfdf} | awk '{print $2}'`
-if [ "${check}" == "" ]
+natoms=`grep -i "NUMBEROFATOMS" ${FCfdf} | awk '{print $2}'`
+if [ "${natoms}" == "" ]
 then
-    echo -e "ERROR: can't find the 'NumberOfAtoms' at FC fdf input file!\n"
+    echo -e "ERROR: can't find the 'NumberOfAtoms' at FC input file!\n"
     exit -1
 else
-    echo -e ${check} >> ${FCdir}inputFC.in
+    echo -e ${natoms} >> ${FCdir}inputFC.in
 fi
 
 nSpecies=`grep -i "NUMBEROFSPECIES" ${FCfdf} | awk '{print $2}'`
 if [ "${nSpecies}" == "" ]
 then
-    echo -e "ERROR: can't find the 'NumberOfSpecies' at FC fdf input file!\n"
+    echo -e "ERROR: can't find the 'NumberOfSpecies' at FC input file!\n"
     exit -1
 else
     echo -e ${nSpecies} >> ${FCdir}inputFC.in
 fi
 
-check=`grep -i -A${nSpecies} "CHEMICALSPECIESLABEL" ${FCfdf} \
-       | head -n $[ ${nSpecies} + 1 ] | tail -n ${nSpecies} \
+check=`grep -i -A${nSpecies} "CHEMICALSPECIESLABEL" ${FCfdf}            \
+       | head -n $[ ${nSpecies} + 1 ] | tail -n ${nSpecies}             \
        | awk '{print $1, $2, $3}'`
 if [ "${check}" == "" ]
 then
-    echo -e "ERROR: can't find the block 'ChemicalSpeciesLabel' at FC fdf input file!\n"
+    echo -e "ERROR: can't find the block 'ChemicalSpeciesLabel' at FC"  \
+	"input file!\n"
     exit -1
 else
     echo -e ${check} >> ${FCdir}inputFC.in
@@ -120,7 +142,7 @@ fi
 FCfirst=`grep -i "MD.FCFIRST" ${FCfdf} | awk '{print $2}'`
 if [ "${FCfirst}" == "" ]
 then
-    echo -e "ERROR: can't find the 'MD.FCfirst' at FC fdf input file!\n"
+    echo -e "ERROR: can't find the 'MD.FCfirst' at FC input file!\n"
     exit -1
 else
     echo -e ${FCfirst} >> ${FCdir}inputFC.in
@@ -129,7 +151,7 @@ fi
 FClast=`grep -i "MD.FCLAST" ${FCfdf} | awk '{print $2}'`
 if [ "${FClast}" == "" ]
 then
-    echo -e "ERROR: can't find the 'MD.FClast' at FC fdf input file!\n"
+    echo -e "ERROR: can't find the 'MD.FClast' at FC input file!\n"
     exit -1
 else
     echo -e ${FClast} >> ${FCdir}inputFC.in
@@ -138,16 +160,18 @@ fi
 check=`grep -i "MD.FCDISPL" ${FCfdf} | awk '{print $2}'`
 if [ "${check}" == "" ]
 then
-    echo -e "ERROR: can't find the 'MD.FCdispl' value at FC fdf input file!\n"
+    echo -e "ERROR: can't find the 'MD.FCdispl' value at FC input"      \
+	"file!\n"
     exit -1
 else
     echo -e ${check} >> ${FCdir}inputFC.in
 fi
 
-check=`grep -i "MD.FCDISPL" ${FCfdf} | awk '{print $3}' | tr '[:upper:]' '[:lower:]'`
+check=`grep -i "MD.FCDISPL" ${FCfdf} | awk '{print $3}'                 \
+       | tr '[:upper:]' '[:lower:]'`
 if [ "${check}" == "" ]
 then
-    echo -e "ERROR: can't find the 'MD.FCdispl' unit at FC fdf input file!\n"
+    echo -e "ERROR: can't find the 'MD.FCdispl' unit at FC input file!\n"
     exit -1
 else
     echo -e ${check} >> ${FCdir}inputFC.in
@@ -155,10 +179,12 @@ fi
 
 dynAtoms=$[ ${FClast} - ${FCfirst} + 1 ]
 check=`grep -i -A${FClast} "ATOMICCOORDINATESANDATOMICSPECIES" ${FCfdf} \
-       | head -n $[ ${FClast} + 1 ] | tail -n ${dynAtoms} | awk '{print $4}'`
+       | head -n $[ ${FClast} + 1 ] | tail -n ${dynAtoms}               \
+       | awk '{print $4}'`
 if [ "${check}" == "" ]
 then
-    echo -e "ERROR: can't find the block 'AtomicCoordinatesAndAtomicSpecies' at FC fdf input file!\n"
+    echo -e "ERROR: can't find the block"                               \
+	"'AtomicCoordinatesAndAtomicSpecies' at FC input file!\n"
     exit -1
 else
     echo -e ${check} >> ${FCdir}inputFC.in
@@ -167,5 +193,40 @@ fi
 echo -e "ok!\n"
 
 rm ${FCdir}FCfdf.tmp
+
+if [ "${3}" != "" ]
+then
+    # Concatenate calculated constant forces matrices and Fermi
+    # energies, and copy '.gHS' files, renaming accordingly.
+    echo "Force constants matrix" > ${FCdir}${slabel}.FC
+    head -n1 ${FCdir}FC${FCfirst}/${slabel}.ef > ${FCdir}${slabel}.ef
+    nlines=$(( ${natoms} * 6 ))
+    j=0
+    for i in `seq ${FCfirst} ${FClast}`
+    do
+        # Concatenated FC matrix.
+	tail -n${nlines} ${FCdir}FC${i}/${slabel}.FC                    \
+	    >> ${FCdir}${slabel}.FC
+
+        # Get Fermi energies.
+	awk 'NR>=2 && NR<=7' ${FCdir}FC${i}/${slabel}.ef                \
+	    | awk -v j=$j '{printf ("%12d  % .14f\n", NR+j, $2);}'      \
+	    >> ${FCdir}${slabel}.ef
+
+	for k in `seq 1 6`
+	do
+	    intIn=`printf "%.3d" ${k}`
+	    intOut=`printf "%.3d" $(( ${j} + ${k} ))`
+	    cp ${FCdir}FC${i}/${slabel}_${intIn}.gHS                    \
+		${FCdir}${slabel}_${intOut}.gHS
+	done
+
+	j=$(( ${j} + 6 ))
+    done
+
+    # Copy one of the '000.gHS' and '.orb' to main FC folder.
+    cp ${FCdir}FC${FCfirst}/${slabel}_000.gHS ${FCdir}
+    cp ${FCdir}FC${FCfirst}/${slabel}.orb ${FCdir}
+fi
 
 exit 0
