@@ -425,6 +425,7 @@ static void symmetrizesAndMassScale (double *FC)
       for (i = j; i < 3 * nDyn; i++) {
 	 /* Computes the mean. */
 	 aux = (FC[idx(i,j,3*nDyn)] + FC[idx(j,i,3*nDyn)]) / 2.0;
+
 	 /* Mass-scales. */
 	 aux = aux / sqrt (dynAtoms[i/3].atom.A * dynAtoms[j/3].atom.A);
 
@@ -616,7 +617,7 @@ void PHONjmolVib (double *EigVec)
    len += strlen (sysLabel);
    JMOLfile = CHECKmalloc ((len + 12) * sizeof (char));
 
-   for (i = 0, j = 1; i < nDyn * 3; i++) {
+   for (i = 0, j = 1; i < 3*nDyn; i++) {
          
 	 /* Opens the JMOL 'xyz' output file. */
 	 sprintf (JMOLfile, "%s%sJMOL%d.xyz", workDir, sysLabel, j);
@@ -691,7 +692,7 @@ static void readHSfile (char *HSfile, double *H, double *S, int efIdx)
    Hsparse = UTILdoubleVector (nspin * maxnhtot);
    Ssparse = UTILdoubleVector (maxnhtot);
    numh = UTILintVector (no_u);
-   listh = UTILintVector (nspin * maxnhtot);
+   listh = UTILintVector (maxnhtot);
 
    /* Reads the number of nonzero elements of each row of H. */
    CHECKfread (fread (numh, no_u * sizeof (int), 1, gHS), 1, HSfile);
@@ -728,7 +729,7 @@ static void readHSfile (char *HSfile, double *H, double *S, int efIdx)
    	 S[idx(i,foo,no_u)] += Ssparse[k];
       }
    for (s = 1; s < nspin; s++) /* 'H' is bigger if 'nspin' > 1 */
-      for (i = 0; i < no_u; i++)
+      for (i = 0, k = 0; i < no_u; i++)
    	 for (j = 0; j < numh[i]; j++, k++) {
   	    foo = (listh[k] - 1) % no_u; /* column index */
    	    H[idx3d(i,foo,s,no_u,no_u)] += rydberg2eV * Hsparse[k];

@@ -192,6 +192,7 @@ if ls ${FCdir}*.psf > /dev/null 2>&1
 then
     pseudo=".psf"
 elif ls ${FCdir}*.vps > /dev/null 2>&1
+then
     pseudo=".vps"
 else
     echo -e " ERROR: couldn't find any pseudo-potential file (psf or"   \
