@@ -312,10 +312,11 @@ static void readOrbitalIndex ()
 /* Calls 'assignGlobalVar' function to assign global         */
 /* variables.                                                */
 void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
-		    char *FCsplit, int *nDynTot, int *nDynOrb,
-		    int *spinPol)
+		    int calcType, char *FCsplit, int *nDynTot,
+		    int *nDynOrb, int *spinPol)
 {
    register int i, len;
+   char calc[2];
    char *scriptCall;
 
    /* For calling the script, one should use a string     */
@@ -324,10 +325,14 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
    len = len + strlen (FCinput);
    scriptCall = CHECKmalloc ((len + 16) * sizeof (char));
    scriptCall[0] = '\0';
+   calc[0] = '\0';
+   sprintf(calc, "%d", calcType);
    strcat (scriptCall, "buildInput.sh ");
    strcat (scriptCall, FCpath);
    strcat (scriptCall, " ");
    strcat (scriptCall, FCinput);
+   strcat (scriptCall, " ");
+   strcat (scriptCall, calc);
    strcat (scriptCall, " ");
    strcat (scriptCall, FCsplit);
 
@@ -364,20 +369,31 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
    /* Reads the file 'inputFC.in' and assigns global variables. */
    assignGlobalVar ();
 
-   /* Reads the Fermi energies. */
-   printf ("\n Gets Fermi energies from (un)displaced systems:\n");
-   setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
-   readFermiEnergy ();
+   if (calcType == 1) { /* 'full' calculation */
 
-   /* Gets the first orbital index of each atom. */
-   printf ("\n Gets basis orbitals dimensions info:\n");
-   setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
-   readOrbitalIndex ();
+      /* Reads the Fermi energies. */
+      printf ("\n Gets Fermi energies from (un)displaced systems:\n");
+      setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
+      readFermiEnergy ();
 
-   /* Returns the dimension of 'FC' and 'e-ph' coupling matrices. */
-   *nDynTot = 3 * nDyn;
-   *nDynOrb = orbIdx[FClast] - orbIdx[FCfirst-1];
-   *spinPol = nspin;
+      /* Gets the first orbital index of each atom. */
+      printf ("\n Gets basis orbitals dimensions info:\n");
+      setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
+      readOrbitalIndex ();
+
+      /* Returns the dimension of 'FC' and 'e-ph' coupling matrices. */
+      *nDynTot = 3 * nDyn;
+      *nDynOrb = orbIdx[FClast] - orbIdx[FCfirst-1];
+      *spinPol = nspin;
+
+   }
+   else { /* 'onlyPh' calculation */
+
+      /* Returns the dimension of 'FC' and 'e-ph' coupling matrices. */
+      *nDynTot = 3 * nDyn;
+      *spinPol = nspin;
+
+   }
 
    /* Removes 'inputFC.in' file. */
    scriptCall[0] = '\0';

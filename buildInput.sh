@@ -33,7 +33,8 @@
 #                                                                       #
 #  Input:  ${1} :  FC calculation main directory                        #
 #          ${2} :  FC input file                                        #
-#          ${3} :  splitFC (optional)                                   #
+#          ${3} :  calculation type (full or onlyPh)                    #
+#          ${4} :  splitFC (optional)                                   #
 #                                                                       #
 #  Use: ./buildInputs.sh [FC calculation directory] [FC input file]     #
 #                                                                       #
@@ -82,7 +83,7 @@ done
 FCfdf=${FCdir}FCfdf.tmp
 
 # Puts all required data at 'inputFC.in'.
-echo -n " Writing required data at '${FCdir}inputFC.in'... "
+echo -e " Writing required data at '${FCdir}inputFC.in'."
 > ${FCdir}inputFC.in
 
 slabel=`grep -i "SYSTEMLABEL" ${FCfdf} | awk '{print $2}'`
@@ -190,43 +191,54 @@ else
     echo -e ${check} >> ${FCdir}inputFC.in
 fi
 
-echo -e "ok!\n"
-
 rm ${FCdir}FCfdf.tmp
 
-if [ "${3}" != "" ]
+if [ "${4}" != "" ]
 then
     # Concatenate calculated constant forces matrices and Fermi
     # energies, and copy '.gHS' files, renaming accordingly.
     echo "Force constants matrix" > ${FCdir}${slabel}.FC
-    head -n1 ${FCdir}FC${FCfirst}/${slabel}.ef > ${FCdir}${slabel}.ef
     nlines=$(( ${natoms} * 6 ))
-    j=0
-    for i in `seq ${FCfirst} ${FClast}`
-    do
-        # Concatenated FC matrix.
-	tail -n${nlines} ${FCdir}FC${i}/${slabel}.FC                    \
-	    >> ${FCdir}${slabel}.FC
 
-        # Get Fermi energies.
-	awk 'NR>=2 && NR<=7' ${FCdir}FC${i}/${slabel}.ef                \
-	    | awk -v j=$j '{printf ("%12d  % .14f\n", NR+j, $2);}'      \
-	    >> ${FCdir}${slabel}.ef
-
-	for k in `seq 1 6`
+    if [ "${3}" == "1" ]
+    then
+	head -n1 ${FCdir}FC${FCfirst}/${slabel}.ef > ${FCdir}${slabel}.ef
+	j=0
+	for i in `seq ${FCfirst} ${FClast}`
 	do
-	    intIn=`printf "%.3d" ${k}`
-	    intOut=`printf "%.3d" $(( ${j} + ${k} ))`
-	    cp ${FCdir}FC${i}/${slabel}_${intIn}.gHS                    \
-		${FCdir}${slabel}_${intOut}.gHS
+            # Concatenated FC matrix.
+	    tail -n${nlines} ${FCdir}FC${i}/${slabel}.FC                \
+		>> ${FCdir}${slabel}.FC
+	
+            # Get Fermi energies.
+	    awk 'NR>=2 && NR<=7' ${FCdir}FC${i}/${slabel}.ef            \
+		| awk -v j=$j '{printf ("%12d  % .14f\n", NR+j, $2);}'  \
+		>> ${FCdir}${slabel}.ef
+
+	    for k in `seq 1 6`
+	    do
+		intIn=`printf "%.3d" ${k}`
+		intOut=`printf "%.3d" $(( ${j} + ${k} ))`
+		cp ${FCdir}FC${i}/${slabel}_${intIn}.gHS                \
+		    ${FCdir}${slabel}_${intOut}.gHS
+	    done
+
+	    j=$(( ${j} + 6 ))
 	done
 
-	j=$(( ${j} + 6 ))
-    done
+        # Copy one of the '000.gHS' and '.orb' to main FC folder.
+	cp ${FCdir}FC${FCfirst}/${slabel}_000.gHS ${FCdir}
+	cp ${FCdir}FC${FCfirst}/${slabel}.orb ${FCdir}
 
-    # Copy one of the '000.gHS' and '.orb' to main FC folder.
-    cp ${FCdir}FC${FCfirst}/${slabel}_000.gHS ${FCdir}
-    cp ${FCdir}FC${FCfirst}/${slabel}.orb ${FCdir}
+    else # onlyPh calculation
+	for i in `seq ${FCfirst} ${FClast}`
+	do
+            # Concatenated FC matrix.
+	    tail -n${nlines} ${FCdir}FC${i}/${slabel}.FC                \
+		>> ${FCdir}${slabel}.FC
+	done
+
+    fi
 fi
 
 exit 0

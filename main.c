@@ -32,22 +32,27 @@
 
 int main (int nargs, char *arg[])
 {
-   int nDynTot, nDynOrb, spinPol;
+   int nDynTot, nDynOrb, spinPol, calcType;
    double *EigVec, *EigVal, *Meph;
    double time;
    clock_t inicial, final;
 
    /* Checks if the input were typed correctly. */
-   if (nargs < 3 || nargs > 4) {
+   if (nargs < 4 || nargs > 5) {
       fprintf (stderr, "\n\n Wrong number of arguments!\n");
       fprintf (stderr, "\n Use: vibranal"); /* arg[0] */
       fprintf (stderr, " [FC directory]"); /* arg[1] */
       fprintf (stderr, " [FC input file]"); /* arg[2] */
-      fprintf (stderr, " [splitFC]\n\n"); /* arg[3] */
+      fprintf (stderr, " [calculation type]"); /* arg[3] */
+      fprintf (stderr, " [splitFC]\n\n"); /* arg[4] */
       fprintf (stderr,
-	   " Examples : vibranal ~/MySystem/FCdir runFC.in\n");
+	       " Examples : vibranal ~/MySystem/FCdir runFC.in full\n");
       fprintf (stderr,
-           "            vibranal ~/MySystem/FCdir runFC.in splitFC\n\n");
+	       "            vibranal ~/MySystem/FCdir runFC.in full splitFC\n");
+      fprintf (stderr,
+	       "            vibranal ~/MySystem/FCdir runFC.in onlyPh\n");
+      fprintf (stderr,
+	       "            vibranal ~/MySystem/FCdir runFC.in onlyPh splitFC\n\n");
       exit (EXIT_FAILURE);
    }
 
@@ -57,12 +62,25 @@ int main (int nargs, char *arg[])
    /* Writes the header on the screen. */
    PHONheader ();
 
+   /* Checks calculation option (full or onlyPh). */
+   if (strcmp (arg[3], "full") == 0)
+      calcType = 1;
+   else {
+      if (strcmp (arg[3], "onlyPh") == 0)
+	 calcType = 2;
+      else {
+	 fprintf (stderr, "\n\n Wrong calculation type option!\n");
+	 fprintf (stderr, "\n It must be 'full' or 'onlyPh'");
+	 exit (EXIT_FAILURE);
+      }
+   }
+
    /* Reads info from FC fdf input file. */
-   if (nargs == 3)
-      PHONreadFCfdf (arg[0], arg[1], arg[2], " ",
+   if (nargs == 4)
+      PHONreadFCfdf (arg[0], arg[1], arg[2], calcType, " ",
 		     &nDynTot, &nDynOrb, &spinPol);
    else
-      PHONreadFCfdf (arg[0], arg[1], arg[2], arg[3],
+      PHONreadFCfdf (arg[0], arg[1], arg[2], calcType, arg[4],
 		     &nDynTot, &nDynOrb, &spinPol);
 
    /* Computes phonon frequencies. */
@@ -72,6 +90,22 @@ int main (int nargs, char *arg[])
 
    /* Writes a 'xyz' file for each computed phonon mode. */
    PHONjmolVib (EigVec);
+
+   /* At "onlyPh" calculations it is finished. */
+   if (calcType == 2) {
+
+      /* Frees memory. */
+      free (EigVec);
+      free (EigVal);
+
+      /* Calculates the execution time. */
+      final = clock();
+      time = (double)(final - inicial) / CLOCKS_PER_SEC;
+      printf ("\n This calculation took %.2f seconds.\n\n", time);
+
+      return 0;
+
+   }
 
    /* Computes electron-phonon coupling matrices. */
    Meph = UTILdoubleVector (nDynOrb * nDynOrb * nDynTot * spinPol);
