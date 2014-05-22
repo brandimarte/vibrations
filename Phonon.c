@@ -96,29 +96,6 @@ static nmass periodicTable[95] = { /* {Z,A} - from SIESTA 3.1 */
 
 
 /* ********************************************************* */
-/* Prints the header on 'stdout'.                            */
-void PHONheader ()
-{
-   printf("\n");
-   printf("**  *************************************************  **\n");
-   printf("**           ** Phonon Vibration Analysis **           **\n");
-   printf("**                                                     **\n");
-   printf("**                  **  Version 1  **                  **\n");
-   printf("**                                                     **\n");
-   printf("**                       IF/USP                        **\n");
-   printf("**                                                     **\n");
-   printf("**   Advisor: Prof. Dr. Alexandre Reily Rocha          **\n");
-   printf("**                                                     **\n");
-   printf("**   Author: Pedro Brandimarte Mendonca                **\n");
-   printf("**                                                     **\n");
-   printf("**  *************************************************  **\n");
-   printf("\n");
-   setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
-
-} /* PHONheader */
-
-
-/* ********************************************************* */
 /* Reads the file 'inputFC.in' and assigns static global     */
 /* variables.                                                */
 static void assignGlobalVar ()
@@ -381,19 +358,14 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
       setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
       readOrbitalIndex ();
 
-      /* Returns the dimension of 'FC' and 'e-ph' coupling matrices. */
-      *nDynTot = 3 * nDyn;
+      /* Returns the total number of orbitals for 'e-ph' coupling matrix. */
       *nDynOrb = orbIdx[FClast] - orbIdx[FCfirst-1];
-      *spinPol = nspin;
 
    }
-   else { /* 'onlyPh' calculation */
 
-      /* Returns the dimension of 'FC' and 'e-ph' coupling matrices. */
-      *nDynTot = 3 * nDyn;
-      *spinPol = nspin;
-
-   }
+   /* Returns the dimension of 'FC' matrix. */
+   *nDynTot = 3 * nDyn;
+   *spinPol = nspin;
 
    /* Removes 'inputFC.in' file. */
    scriptCall[0] = '\0';

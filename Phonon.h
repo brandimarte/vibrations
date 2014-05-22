@@ -36,9 +36,6 @@
 #define PHONephCoupling phonephcoupling_
 #endif
 
-/* Prints the header on the screen. */
-void PHONheader ();
-
 /* Collects required informations from FC input 'fdf' file. */
 void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
 		    int calcType, char *FCsplit, int *nDynTot,

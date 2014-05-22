@@ -30,6 +30,12 @@
 #include "Utils.h"
 #include "Phonon.h"
 
+/* Prints the header on the screen. */
+static void header ();
+
+/* Prints the "how to run" on the screen. */
+static void howto ();
+
 int main (int nargs, char *arg[])
 {
    int nDynTot, nDynOrb, spinPol, calcType;
@@ -37,30 +43,18 @@ int main (int nargs, char *arg[])
    double time;
    clock_t inicial, final;
 
+   /* Writes the header on the screen. */
+   header ();
+
    /* Checks if the input were typed correctly. */
    if (nargs < 4 || nargs > 5) {
-      fprintf (stderr, "\n\n Wrong number of arguments!\n");
-      fprintf (stderr, "\n Use: vibranal"); /* arg[0] */
-      fprintf (stderr, " [FC directory]"); /* arg[1] */
-      fprintf (stderr, " [FC input file]"); /* arg[2] */
-      fprintf (stderr, " [calculation type]"); /* arg[3] */
-      fprintf (stderr, " [splitFC]\n\n"); /* arg[4] */
-      fprintf (stderr,
-	       " Examples : vibranal ~/MySystem/FCdir runFC.in full\n");
-      fprintf (stderr,
-	       "            vibranal ~/MySystem/FCdir runFC.in full splitFC\n");
-      fprintf (stderr,
-	       "            vibranal ~/MySystem/FCdir runFC.in onlyPh\n");
-      fprintf (stderr,
-	       "            vibranal ~/MySystem/FCdir runFC.in onlyPh splitFC\n\n");
+      fprintf (stderr, "\n Wrong number of arguments!\n");
+      howto ();
       exit (EXIT_FAILURE);
    }
 
    /* Time is running. */
    inicial = clock();
-
-   /* Writes the header on the screen. */
-   PHONheader ();
 
    /* Checks calculation option (full or onlyPh). */
    if (strcmp (arg[3], "full") == 0)
@@ -69,8 +63,9 @@ int main (int nargs, char *arg[])
       if (strcmp (arg[3], "onlyPh") == 0)
 	 calcType = 2;
       else {
-	 fprintf (stderr, "\n\n Wrong calculation type option!\n");
-	 fprintf (stderr, "\n It must be 'full' or 'onlyPh'");
+	 fprintf (stderr, "\n Wrong calculation type option!\n");
+	 fprintf (stderr, "\n It must be 'full' or 'onlyPh'.\n");
+	 howto ();
 	 exit (EXIT_FAILURE);
       }
    }
@@ -125,3 +120,47 @@ int main (int nargs, char *arg[])
    
 } /* main */
 
+
+/* ********************************************************* */
+/* Prints the header on 'stdout'.                            */
+static void header ()
+{
+   printf("\n");
+   printf("**  *************************************************  **\n");
+   printf("**           ** Phonon Vibration Analysis **           **\n");
+   printf("**                                                     **\n");
+   printf("**                  **  Version 1  **                  **\n");
+   printf("**                                                     **\n");
+   printf("**                       IF/USP                        **\n");
+   printf("**                                                     **\n");
+   printf("**   Advisor: Prof. Dr. Alexandre Reily Rocha          **\n");
+   printf("**                                                     **\n");
+   printf("**   Author: Pedro Brandimarte Mendonca                **\n");
+   printf("**                                                     **\n");
+   printf("**  *************************************************  **\n");
+   printf("\n");
+   setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
+
+} /* PHONheader */
+
+
+/* ********************************************************* */
+/* Prints the "how to run" on 'stdout'.                      */
+static void howto ()
+{
+
+   fprintf (stderr, "\n Use: vibranal"); /* arg[0] */
+   fprintf (stderr, " [FC directory]"); /* arg[1] */
+   fprintf (stderr, " [FC input file]"); /* arg[2] */
+   fprintf (stderr, " [calculation type]"); /* arg[3] */
+   fprintf (stderr, " [splitFC]\n\n"); /* arg[4] */
+   fprintf (stderr,
+	    " Examples : vibranal ~/MySystem/FCdir runFC.in full\n");
+   fprintf (stderr,
+	    "            vibranal ~/MySystem/FCdir runFC.in full splitFC\n");
+   fprintf (stderr,
+	    "            vibranal ~/MySystem/FCdir runFC.in onlyPh\n");
+   fprintf (stderr,
+	    "            vibranal ~/MySystem/FCdir runFC.in onlyPh splitFC\n\n");
+
+} /* howto */
