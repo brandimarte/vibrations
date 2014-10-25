@@ -198,11 +198,11 @@ then
     # Concatenate calculated constant forces matrices and Fermi
     # energies, and copy '.gHS' files, renaming accordingly.
     echo "Force constants matrix" > ${FCdir}${slabel}.FC
-    nlines=$(( ${natoms} * 6 ))
 
     if [ "${3}" == "1" ]
     then
 	head -n1 ${FCdir}FC${FCfirst}/${slabel}.ef > ${FCdir}${slabel}.ef
+        nlines=$(( ${natoms} * 6 ))
 	j=0
 	for i in `seq ${FCfirst} ${FClast}`
 	do
