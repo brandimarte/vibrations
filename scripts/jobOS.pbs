@@ -1,0 +1,77 @@
+#!/bin/bash
+
+#########################################################################
+# Job submission requested parameters, see 'man qsub'.                  #
+#########################################################################
+#PBS -N i-smeagol
+#PBS -l place=scatter
+#PBS -l select=1:ncpus=4:mpiprocs=4:mem=6gb
+#PBS -l walltime=24:00:00 # teste (t<=24h), media (24h<t<=168h),
+                          # longa (168h<t<=360h), infinita (t>360h)
+#PBS -m bea
+#PBS -M brandimarte@gmail.com
+#PBS -e ISmeagol.err
+#PBS -o ISmeagol.log
+##PBS -W depend=afterok:job_id[:jobid...]
+
+#########################################################################
+# Setup environment.                                                    #
+#########################################################################
+
+ulimit -s unlimited
+ulimit -l unlimited
+
+#export OMP_NUM_THREADS=1
+
+module load i-smeagol/master-impi-13.1.1
+
+##ISMEAGOL=/home/pedro/local/bin/i-smeagol.2.0.dev.CDF.IMPI.i2013
+##ISMEAGOL=/home/pedro/local/bin/i-smeagol.2.0.optim.CDF.IMPI.i2013
+##ISMEAGOL=i-smeagol.2.0.dev.CDF.IMPI.i2013
+ISMEAGOL=i-smeagol.2.0.optim.CDF.IMPI.i2013
+
+LSCRATCH="/home/scratch/${USER}/ismeagol_${PBS_JOBID}"
+RESULT_DIR=${PBS_O_WORKDIR}
+
+#########################################################################
+# Setup and copy files to computing node, '/home/scratch'.              #
+#########################################################################
+
+# Remove annoying or confusing files.
+##rm ${PBS_O_WORKDIR}/INPUT_TMP.*
+
+# Generate information files in original folder.
+echo `qstat -n ${PBS_NODEFILE}` > NODELIST_${PBS_JOBID}
+echo ${LSCRATCH} > LSCRATCH_${PBS_JOBID}
+
+# Make lscratch.
+mkdir -p ${LSCRATCH}
+echo ${PBS_O_WORKDIR} > ${LSCRATCH}/orig.workdir
+
+# Copy data to lcratch.
+rsync -av ${PBS_O_WORKDIR}/* ${LSCRATCH}
+
+# Switch to working directory.
+cd ${LSCRATCH}
+
+echo "------------------------------------------------------------------"
+echo "Beginning of the job:" `date`
+echo "Hostname: " `hostname`
+echo "PWD: " ${PWD}
+
+./runOS.pbs.sh ${PBS_O_WORKDIR} bdtVibra.fdf mpirun \
+    ${PBS_NODEFILE} ${ISMEAGOL} > bdtOS.out
+
+echo "End of the job:" `date`
+echo "------------------------------------------------------------------"
+
+# Cleanup, sleep, then copy back to original folder.
+cp -a ./* ${RESULT_DIR}
+cd ${PBS_O_WORKDIR}
+rm -rf ${LSCRATCH}
+
+# Remove files with no more use.
+rm ${PBS_O_WORKDIR}/LSCRATCH_${PBS_JOBID}
+rm ${PBS_O_WORKDIR}/NODELIST_${PBS_JOBID}
+
+############################## END OF JOB ###############################

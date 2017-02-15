@@ -1,0 +1,55 @@
+#  *****************************************************  #
+#             ** Phonon Vibration Analysis **             #
+#                                                         #
+#                    **  Version 2  **                    #
+#                                                         #
+#                         IF/USP                          #
+#                                                         #
+#   Advisor: Prof. Dr. Alexandre Reily Rocha              #
+#                                                         #
+#   Author: Pedro Brandimarte Mendonca                    #
+#                                                         #
+#   File: Makefile                                        #
+#                                                         #
+#  *****************************************************  #
+#  Makefile to build 'vibrations' code.                   #
+#  *****************************************************  #
+
+CFLAGS     = -O3 -mavx2 -m64 -fPIC -ftree-vectorize -funroll-loops \
+             -fprefetch-loop-arrays -floop-block -fgraphite -Wall
+FPPFLAGS   = -DOLD
+MATH_ROOT  = /home/pedro/local/opt
+OBLAS_LIB  = -L$(MATH_ROOT)/openblas/0.2.19/g6.3.0/lib
+LAPACK_LIB = -L$(MATH_ROOT)/lapack/3.7.0/g6.3.0/lib
+LDLIBS     = $(OBLAS_LIB) $(LAPACK_LIB) -lopenblas -llapack -lm
+INCFLAGS   = -I. -I$(MATH_ROOT)/openblas/0.2.19/g6.3.0/include
+
+RM = /bin/rm -f
+CC = gcc
+
+#  *****************************************************  #
+
+.PHONY: all clean
+
+#  *****************************************************  #
+
+.c.o:
+	$(CC) $(CFLAGS) -c $(INCFLAGS) $(FPPFLAGS) $*.c
+
+.c:
+	make $*.o
+	$(CC) $(CFLAGS) $(INCFLAGS) -o $* $*.o $(LDLIBS) 
+
+#  *****************************************************  #
+
+all: vibrations
+
+vibrations: Check.o Utils.o Phonon.o main.o
+	$(CC) $(CFLAGS) $(INCFLAGS) -o vibrations \
+	Check.o Utils.o Phonon.o main.o $(LDLIBS) 
+
+#  *****************************************************  #
+
+clean:
+	$(RM) *~ \#~ .\#* *.o vibrations core a.out
+

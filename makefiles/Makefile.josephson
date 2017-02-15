@@ -1,0 +1,53 @@
+#  *****************************************************  #
+#           ** PhOnonS ITeratIVE VIBRATIONS **            #
+#                                                         #
+#                    **  Version 2  **                    #
+#                                                         #
+#                         IF/USP                          #
+#                                                         #
+#   Advisor: Prof. Dr. Alexandre Reily Rocha              #
+#                                                         #
+#   Author: Pedro Brandimarte Mendonca                    #
+#                                                         #
+#   File: Makefile.josephson                              #
+#                                                         #
+#  *****************************************************  #
+#  Makefile to build 'POSITIVE VIBRATIONS' code.          #
+#  *****************************************************  #
+
+CFLAGS   = -O2 -xHost -fPIC -ip -mp1 -Wall
+FPPFLAGS = 
+MKL      = /opt/intel/composer_xe_2013_sp1.2.144/mkl
+LDLIBS   = -L$(MKL)/lib/intel64 -lmkl_intel_lp64 \
+           -lmkl_sequential -lmkl_core -lpthread
+INCFLAGS = -I. -I$(MKL)/include
+
+RM = /bin/rm -f
+CC = icc
+
+#  *****************************************************  #
+
+.PHONY: all clean
+
+#  *****************************************************  #
+
+.c.o:
+	$(CC) $(CFLAGS) -c $(INCFLAGS) $(FPPFLAGS) $*.c
+
+.c:
+	make $*.o
+	$(CC) $(CFLAGS) $(INCFLAGS) -o $* $*.o $(LDLIBS) 
+
+#  *****************************************************  #
+
+all: vibrations
+
+vibrations: Check.o Utils.o Phonon.o main.o
+	$(CC) $(CFLAGS) $(INCFLAGS) -o vibrations \
+	Check.o Utils.o Phonon.o main.o $(LDLIBS) 
+
+#  *****************************************************  #
+
+clean:
+	$(RM) *~ \#~ .\#* *.o vibrations core a.out
+
