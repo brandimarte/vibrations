@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "Utils.h"
 #include "Phonon.h"
@@ -149,18 +150,18 @@ static void header ()
 static void howto ()
 {
 
-   fprintf (stderr, "\n Use: vibranal"); /* arg[0] */
+   fprintf (stderr, "\n Use: vibrations"); /* arg[0] */
    fprintf (stderr, " [FC directory]"); /* arg[1] */
    fprintf (stderr, " [FC input file]"); /* arg[2] */
    fprintf (stderr, " [calculation type]"); /* arg[3] */
    fprintf (stderr, " [splitFC]\n\n"); /* arg[4] */
    fprintf (stderr,
-	    " Examples : vibranal ~/MySystem/FCdir runFC.in full\n");
+	    " Examples : vibrations ~/MySystem/FCdir runFC.in full\n");
    fprintf (stderr,
-	    "            vibranal ~/MySystem/FCdir runFC.in full splitFC\n");
+	    "            vibrations ~/MySystem/FCdir runFC.in full splitFC\n");
    fprintf (stderr,
-	    "            vibranal ~/MySystem/FCdir runFC.in onlyPh\n");
+	    "            vibrations ~/MySystem/FCdir runFC.in onlyPh\n");
    fprintf (stderr,
-	    "            vibranal ~/MySystem/FCdir runFC.in onlyPh splitFC\n\n");
+	    "            vibrations ~/MySystem/FCdir runFC.in onlyPh splitFC\n\n");
 
 } /* howto */

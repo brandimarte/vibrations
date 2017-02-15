@@ -298,13 +298,12 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
 
    /* For calling the script, one should use a string     */
    /* like this: "[script name with path] [FC directory]" */
-   len = strlen (FCpath);
-   len = len + strlen (FCinput);
-   scriptCall = CHECKmalloc ((len + 16) * sizeof (char));
+   len = strlen(FCpath) + strlen(FCinput) + strlen(FCsplit);
+   scriptCall = CHECKmalloc ((len + 19) * sizeof (char));
    scriptCall[0] = '\0';
    calc[0] = '\0';
-   sprintf(calc, "%d", calcType);
-   strcat (scriptCall, "buildInput.sh ");
+   sprintf(&calc[0], "%d", calcType);
+   strcpy (scriptCall, "buildInput.sh ");
    strcat (scriptCall, FCpath);
    strcat (scriptCall, " ");
    strcat (scriptCall, FCinput);
@@ -315,8 +314,8 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
 
    /* Assigns the work directory global variable. */
    len = strlen (exec);
-   workDir = CHECKmalloc ((len - 8) * sizeof (char));
-   for (i = 0; i < len - 8; i++)
+   workDir = CHECKmalloc ((len - 9) * sizeof (char));
+   for (i = 0; i < len - 10; i++)
       workDir[i] = exec[i];
    workDir[i] = '\0';
 
@@ -371,7 +370,7 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
    scriptCall[0] = '\0';
    strcpy (scriptCall, "rm ");
    strcat (scriptCall, exec);
-   scriptCall[strlen (scriptCall)-8] = '\0'; /* removes 'exec' */
+   scriptCall[strlen (scriptCall)-10] = '\0'; /* removes 'exec' */
    strcat (scriptCall, "inputFC.in");
    i = system (scriptCall);
 
@@ -616,12 +615,12 @@ void PHONjmolVib (double *EigVec)
 
 	 /* Writes only the coordinates. */
 	 for (k = 0; k < FCfirst - 1; k++)
-	    fprintf (JMOL, "%s\t% le\t% le\t% le\n", coord[k].name,
+	    fprintf (JMOL, "%s\t% e\t% e\t% e\n", coord[k].name,
 		     coord[k].x, coord[k].y, coord[k].z);
 
 	 /* Writes the coordinates and the normalized phonon mode. */
 	 for (k = FCfirst - 1; k < FClast; k++)
-	    fprintf (JMOL, "%s\t% le\t% le\t% le\t% le\t% le\t% le\n",
+	    fprintf (JMOL, "%s\t% e\t% e\t% e\t% e\t% e\t% e\n",
 		     coord[k].name, coord[k].x, coord[k].y, coord[k].z,
 		     EigVec[idx(3*(k-FCfirst+1),i,3*nDyn)],
 		     EigVec[idx(3*(k-FCfirst+1)+1,i,3*nDyn)],
@@ -629,7 +628,7 @@ void PHONjmolVib (double *EigVec)
 
 	 /* Writes only the coordinates. */
 	 for (k = FClast; k < nAtoms; k++)
-	    fprintf (JMOL, "%s\t% le\t% le\t% le\n", coord[k].name,
+	    fprintf (JMOL, "%s\t% e\t% e\t% e\n", coord[k].name,
 		     coord[k].x, coord[k].y, coord[k].z);
 
 	 /* Closes the JMOL 'xyz' output file. */
@@ -1041,10 +1040,10 @@ static void eph (double *EigVec, double *EigVal,
 /* corresponding electron-phonon coupling matrix.            */
 static void ephOut (double *EigVal, double *Meph)
 {
-   register int i, j, l, s, nOrb;
-   register int len;
-   char *ephFile;
-   FILE *EPH;
+   register int i, j, l, s, len;
+   int nOrb, foo;
+   char *ephFile, *ephFileB;
+   FILE *EPH, *EPHb;
 
    /* Sets the '.Meph' file name with 'FCdir' path. */
    len = strlen (FCdir);
@@ -1052,20 +1051,33 @@ static void ephOut (double *EigVal, double *Meph)
    ephFile = CHECKmalloc ((len + 6) * sizeof (char));
    ephFile[0] = '\0';
    sprintf (ephFile, "%s%s.Meph", FCdir, sysLabel);
+   ephFileB = CHECKmalloc ((len + 7) * sizeof (char));
+   ephFileB[0] = '\0';
+   sprintf (ephFileB, "%s%s.bMeph", FCdir, sysLabel);
 
    /* Opens the '.Meph' file. */
    printf (" Writing electron-phonon coupling matrix at \"%s\" file... ",
 	   ephFile);
    EPH = CHECKfopen (ephFile, "w");
+   EPHb = CHECKfopen (ephFileB, "wb");
 
    /* Writes the dimensions. */
    nOrb = orbIdx[FClast] - orbIdx[FCfirst - 1]; /* number of dyn orbs */
    fprintf (EPH, "%d  %d  %d  %d  %d\n\n", nspin, nDyn,
 	    nOrb, orbIdx[FCfirst-1]+1, orbIdx[FCfirst-1]+nOrb);
+   fwrite (&nspin, sizeof(int), 1, EPHb);
+   fwrite (&nDyn, sizeof(int), 1, EPHb);
+   fwrite (&nOrb, sizeof(int), 1, EPHb);
+   foo = orbIdx[FCfirst-1]+1;
+   fwrite (&foo, sizeof(int), 1, EPHb);
+   foo = orbIdx[FCfirst-1]+nOrb;
+   fwrite (&foo, sizeof(int), 1, EPHb);
 
    /* Prints the phonon frequencies. */
-   for (l = 3 * nDyn - 1; l >= 0; l--)
+   for (l = 3 * nDyn - 1; l >= 0; l--) {
       fprintf (EPH, "%.10e  ", EigVal[l]);
+      fwrite (&(EigVal[l]), sizeof(double), 1, EPHb);
+   }
    fprintf (EPH, "\n\n");
 
    /* Prints the electron-phonon coupling matrix. */
@@ -1074,11 +1086,13 @@ static void ephOut (double *EigVal, double *Meph)
 	 for (s = 0; s < nspin; s++) {
 	    for (i = 0; i < nOrb; i++) {
 	       for (j = 0; j < nOrb; j ++)
-		  fprintf (EPH, " (% .15e,0.0e+00)",
+		  fprintf (EPH, " % .15e",
 			   Meph[idx3d(i,j,l*nspin+s,nOrb,nOrb)]);
 	       fprintf (EPH, "\n");
 	    }
 	    fprintf (EPH, "\n");
+	    fwrite (&(Meph[idx3d(0,0,l*nspin+s,nOrb,nOrb)]),
+		    sizeof(double), nOrb*nOrb, EPHb);
 	 }
 
    /* /\* for (l = 0; l < 3 * nDyn; l++) *\/ */
@@ -1097,11 +1111,13 @@ static void ephOut (double *EigVal, double *Meph)
 
    /* Closes the file. */
    CHECKfclose (fclose (EPH), ephFile);
+   CHECKfclose (fclose (EPHb), ephFileB);
    printf ("ok!\n");
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
 
    /* Frees memory. */
    free (ephFile);
+   free (ephFileB);
 
 } /* ephOut */
 

@@ -1,11 +1,9 @@
 #!/bin/bash
 
 #  *******************************************************************  #
-#                       ** Vibration Analysis **                        #
+#                  ** PhOnonS ITeratIVE VIBRATIONS **                   #
 #                                                                       #
 #                           **  Version 2  **                           #
-#                                                                       #
-#                                IF/USP                                 #
 #                                                                       #
 #  Written by Pedro Brandimarte (brandimarte@gmail.com)                 #
 #                                                                       #
@@ -45,6 +43,7 @@
 #  ***************************** HISTORY *****************************  #
 #  Original version:    October 2012                                    #
 #                       February 2014                                   #
+#                       June 2015                                       #
 #  *******************************************************************  #
 
 # FC directory
@@ -61,13 +60,13 @@ echo -e ""
 echo -n " Checking input... "
 if [ ! -r ${FCdir} ]
 then
-    echo -e "\nvibranal: ERROR: the directory \"${FCdir}\" doesn't"     \
+    echo -e "\nvibrations: ERROR: the directory \"${FCdir}\" doesn't"   \
 	"exist or is not accessible!\n"
     exit -1
 elif [ ! -r ${FCdir}${2} ]
 then
-    echo -e "\nvibranal: ERROR: the file \"${2}\" doesn't exist or is"  \
-	"not accessible!\n"
+    echo -e "\nvibrations: ERROR: the file \"${2}\" doesn't exist or"   \
+	"is not accessible!\n"
     exit -1
 else
     echo -e "ok!\n"
@@ -131,7 +130,6 @@ then
     echo -e "1" >> ${FCdir}inputFC.in
 else
     TorF=`echo ${check} | grep -i "TRUE"`
-    echo -e ${TorF}
     if [ "${TorF}" == "" ]
     then
 	echo -e "1" >> ${FCdir}inputFC.in

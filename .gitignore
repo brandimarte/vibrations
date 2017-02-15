@@ -2,7 +2,7 @@ Check.o
 Phonon.o
 Utils.o
 main.o
-vibranal
+vibrations
 Makefile
 !.gitignore
 

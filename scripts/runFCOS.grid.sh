@@ -186,7 +186,7 @@ else
 fi
 
 # Submits the job.
-echo -e "vibranal: Running FC calculation...\n\n"
+echo -e "vibrations: Running FC calculation...\n\n"
 submit="${3} ${4}"
 ${submit} < ${FCfdf}
 wait
