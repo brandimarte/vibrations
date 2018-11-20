@@ -1,15 +1,10 @@
 /**  *****************************************************  **/
 /**             ** Phonon Vibration Analysis **             **/
 /**                                                         **/
-/**                    **  Version 1  **                    **/
+/**                    **  Version 2  **                    **/
 /**                                                         **/
-/**                         IF/USP                          **/
-/**                                                         **/
-/**   Advisor: Prof. Dr. Alexandre Reily Rocha              **/
-/**                                                         **/
-/**   Author: Pedro Brandimarte Mendonca                    **/
-/**                                                         **/
-/**   File: Utils.c                                         **/
+/**   By: Pedro Brandimarte (brandimarte@gmail.com) and     **/
+/**       Alexandre Reily Rocha (reilya@ift.unesp.br)       **/
 /**                                                         **/
 /**  *****************************************************  **/
 /**  Implementation of matrix (vector) algebra utilities.   **/

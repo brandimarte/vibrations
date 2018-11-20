@@ -3,16 +3,8 @@
 /**                                                         **/
 /**                    **  Version 2  **                    **/
 /**                                                         **/
-/**                         IF/USP                          **/
-/**                                                         **/
-/**   Advisor: Prof. Dr. Alexandre Reily Rocha              **/
-/**                                                         **/
-/**   Author: Pedro Brandimarte Mendonca                    **/
-/**                                                         **/
-/**   File: Extern.h                                        **/
-/**                                                         **/
-/**   Versions: 1 - 10/10/2012                              **/
-/**             2 - 08/01/2013                              **/
+/**   By: Pedro Brandimarte (brandimarte@gmail.com) and     **/
+/**       Alexandre Reily Rocha (reilya@ift.unesp.br)       **/
 /**                                                         **/
 /**  *****************************************************  **/
 /**  Interface for some external functions from 'LAPACK'    **/

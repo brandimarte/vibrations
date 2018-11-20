@@ -3,13 +3,8 @@
 #                                                         #
 #                    **  Version 2  **                    #
 #                                                         #
-#                         IF/USP                          #
-#                                                         #
-#   Advisor: Prof. Dr. Alexandre Reily Rocha              #
-#                                                         #
-#   Author: Pedro Brandimarte Mendonca                    #
-#                                                         #
-#   File: Makefile.keldysh                                #
+#   By: Pedro Brandimarte (brandimarte@gmail.com) and     #
+#       Alexandre Reily Rocha (reilya@ift.unesp.br)       #
 #                                                         #
 #  *****************************************************  #
 #  Makefile to build 'POSITIVE VIBRATIONS' code.          #
@@ -17,7 +12,7 @@
 
 CFLAGS   = -O3 -xHost -fPIC -ip -mp1 -Wall
 FPPFLAGS = 
-MKL      = /opt/intel/composer_xe_2013_sp1.0.080/mkl
+MKL      = /home/pedro/local/opt/intel/parallel_studio_xe_2017/mkl
 LDLIBS   = -L$(MKL)/lib/intel64 -lmkl_intel_lp64 \
            -lmkl_sequential -lmkl_core
 INCFLAGS = -I. -I$(MKL)/include

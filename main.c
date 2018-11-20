@@ -3,16 +3,8 @@
 /**                                                         **/
 /**                    **  Version 2  **                    **/
 /**                                                         **/
-/**                         IF/USP                          **/
-/**                                                         **/
-/**   Advisor: Prof. Dr. Alexandre Reily Rocha              **/
-/**                                                         **/
-/**   Author: Pedro Brandimarte Mendonca                    **/
-/**                                                         **/
-/**   File: main.c                                          **/
-/**                                                         **/
-/**   Versions: 1 - 10/10/2012                              **/
-/**             2 - 08/01/2013                              **/
+/**   By: Pedro Brandimarte (brandimarte@gmail.com) and     **/
+/**       Alexandre Reily Rocha (reilya@ift.unesp.br)       **/
 /**                                                         **/
 /**  *****************************************************  **/
 /**  This is a (client) program that reads the output data  **/
@@ -132,11 +124,8 @@ static void header ()
    printf("**                                                     **\n");
    printf("**                  **  Version 1  **                  **\n");
    printf("**                                                     **\n");
-   printf("**                       IF/USP                        **\n");
-   printf("**                                                     **\n");
-   printf("**   Advisor: Prof. Dr. Alexandre Reily Rocha          **\n");
-   printf("**                                                     **\n");
-   printf("**   Author: Pedro Brandimarte Mendonca                **\n");
+   printf("**  By: Pedro Brandimarte (brandimarte@gmail.com) and  **\n");
+   printf("**      Alexandre Reily Rocha (reilya@ift.unesp.br)    **\n");
    printf("**                                                     **\n");
    printf("**  *************************************************  **\n");
    printf("\n");

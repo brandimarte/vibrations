@@ -1,29 +1,26 @@
 #  *****************************************************  #
-#           ** PhOnonS ITeratIVE VIBRATIONS **            #
+#             ** Phonon Vibration Analysis **             #
 #                                                         #
 #                    **  Version 2  **                    #
 #                                                         #
-#                         IF/USP                          #
-#                                                         #
-#   Advisor: Prof. Dr. Alexandre Reily Rocha              #
-#                                                         #
-#   Author: Pedro Brandimarte Mendonca                    #
-#                                                         #
-#   File: Makefile.josephson                              #
+#   By: Pedro Brandimarte (brandimarte@gmail.com) and     #
+#       Alexandre Reily Rocha (reilya@ift.unesp.br)       #
 #                                                         #
 #  *****************************************************  #
 #  Makefile to build 'POSITIVE VIBRATIONS' code.          #
 #  *****************************************************  #
 
-CFLAGS   = -O2 -xHost -fPIC -ip -mp1 -Wall
-FPPFLAGS = 
-MKL      = /opt/intel/composer_xe_2013_sp1.2.144/mkl
-LDLIBS   = -L$(MKL)/lib/intel64 -lmkl_intel_lp64 \
-           -lmkl_sequential -lmkl_core -lpthread
-INCFLAGS = -I. -I$(MKL)/include
+CFLAGS     = -O3 -mavx2 -m64 -fPIC -ftree-vectorize -funroll-loops \
+             -fprefetch-loop-arrays -floop-block -fgraphite -Wall
+FPPFLAGS   = -DOLD
+MATH_ROOT  = /home/pedro/local/opt
+OBLAS_LIB  = -L$(MATH_ROOT)/openblas/0.2.19/g6.3.0/lib
+LAPACK_LIB = -L$(MATH_ROOT)/lapack/3.7.0/g6.3.0/lib
+LDLIBS     = $(OBLAS_LIB) $(LAPACK_LIB) -lopenblas -llapack -lm
+INCFLAGS   = -I. -I$(MATH_ROOT)/openblas/0.2.19/g6.3.0/include
 
 RM = /bin/rm -f
-CC = icc
+CC = gcc
 
 #  *****************************************************  #
 

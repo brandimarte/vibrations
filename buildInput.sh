@@ -5,7 +5,8 @@
 #                                                                       #
 #                           **  Version 2  **                           #
 #                                                                       #
-#  Written by Pedro Brandimarte (brandimarte@gmail.com)                 #
+#   By: Pedro Brandimarte (brandimarte@gmail.com) and                   #
+#       Alexandre Reily Rocha (reilya@ift.unesp.br)                     #
 #                                                                       #
 #  Copyright (c), All Rights Reserved                                   #
 #                                                                       #
