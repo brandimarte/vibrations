@@ -2,4 +2,4 @@
 
 __PhOnonS ITeratIVE VIBRATIONS__ - vibrational and electron-phonon coupling analysis via first-principles.
 
-![vibrations logo](/doc/images/VIBRATIONS.png "POSITIVE VIBRATIONS")
+![vibrations logo](/docs/images/VIBRATIONS.png "POSITIVE VIBRATIONS")
