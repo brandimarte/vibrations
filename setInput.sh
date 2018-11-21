@@ -22,7 +22,7 @@
 #  distributed along with this program or at                            #
 #  <http://www.gnu.org/licenses/gpl.html>).                             #
 #  *******************************************************************  #
-#                             buildInput.sh                             #
+#                              setInput.sh                              #
 #  *******************************************************************  #
 #  This script collects required informations from the input 'fdf'      #
 #  file of a previous force constants (FC) run and copies them at       #
@@ -35,7 +35,7 @@
 #          ${3} :  calculation type (full or onlyPh)                    #
 #          ${4} :  splitFC (optional)                                   #
 #                                                                       #
-#  Use: ./buildInputs.sh [FC calculation directory] [FC input file]     #
+#  Use: ./setInputs.sh [FC calculation directory] [FC input file]       #
 #                                                                       #
 #  Written by Pedro Brandimarte, Feb 2014.                              #
 #  Instituto de Fisica                                                  #

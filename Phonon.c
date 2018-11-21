@@ -295,7 +295,7 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
    scriptCall[0] = '\0';
    calc[0] = '\0';
    sprintf(&calc[0], "%d", calcType);
-   strcpy (scriptCall, "buildInput.sh ");
+   strcpy (scriptCall, "setInput.sh ");
    strcat (scriptCall, FCpath);
    strcat (scriptCall, " ");
    strcat (scriptCall, FCinput);
@@ -330,7 +330,7 @@ void PHONreadFCfdf (char *exec, char *FCpath, char *FCinput,
    setvbuf (stdout, NULL, _IONBF, 0); /* print now! */
    if (i != 0) {
       fprintf (stderr, " ERROR: problem when trying to run");
-      fprintf (stderr, " 'buildInput.sh' script!\n\n");
+      fprintf (stderr, " 'setInput.sh' script!\n\n");
       exit (EXIT_FAILURE);
    }
 
